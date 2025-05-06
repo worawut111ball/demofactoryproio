@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { blogs } from "@/lib/db-utils"
 import { writeFile, mkdir } from "fs/promises"
 import path from "path"
+import { prisma } from "@/lib/prisma";
 
 // GET: ดึง blog พร้อมภาพทั้งหมด
 export async function GET() {

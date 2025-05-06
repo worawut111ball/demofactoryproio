@@ -1,36 +1,49 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState } from "react"
-import AdminNavbar from "@/components/admin/admin-navbar"
-import AuthCheck from "@/components/admin/auth-check"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Trash2, Edit, Plus } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
+import { useEffect, useState } from "react";
+import AdminNavbar from "@/components/admin/admin-navbar";
+import AuthCheck from "@/components/admin/auth-check";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Trash2, Edit, Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 interface BlogData {
-  id: string
-  title: string
-  excerpt: string
-  imageUrl: string
-  date: string
-  readTime: string
-  category: string
-  slug: string
+  id: string;
+  title: string;
+  excerpt: string;
+  imageUrl: string;
+  date: string;
+  readTime: string;
+  category: string;
+  slug: string;
+  images: { url: string }[];
 }
 
 export default function BlogsPage() {
-  const [blogs, setBlogs] = useState<BlogData[]>([])
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [currentBlog, setCurrentBlog] = useState<BlogData | null>(null)
+  const [blogs, setBlogs] = useState<BlogData[]>([]);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [currentBlog, setCurrentBlog] = useState<BlogData | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -39,78 +52,88 @@ export default function BlogsPage() {
     readTime: "",
     category: "",
     slug: "",
-  })
-  const [isLoading, setIsLoading] = useState(true)
-  const { toast } = useToast()
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageFiles(Array.from(e.target.files));
+    }
+  };
 
   // แก้ไขฟังก์ชัน loadBlogs ให้ใช้ API แทน localStorage
   const loadBlogs = async () => {
     try {
-      setIsLoading(true)
-      const response = await fetch("/api/blogs")
+      setIsLoading(true);
+      const response = await fetch("/api/blogs");
 
       if (!response.ok) {
-        throw new Error("Failed to fetch blogs")
+        throw new Error("Failed to fetch blogs");
       }
 
-      const data = await response.json()
-      console.log("Loaded blogs:", data)
+      const data = await response.json();
+      console.log("Loaded blogs:", data);
 
       // เรียงลำดับข้อมูลจากใหม่ไปเก่า
       const sortedData = [...data].sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      })
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
 
-      setBlogs(sortedData)
+      setBlogs(sortedData);
     } catch (error) {
-      console.error("Error loading blogs:", error)
+      console.error("Error loading blogs:", error);
       toast({
         title: "เกิดข้อผิดพลาด",
         description: "ไม่สามารถโหลดข้อมูลบทความได้",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    loadBlogs()
-  }, [])
+    loadBlogs();
+  }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // แก้ไขฟังก์ชัน handleAddBlog ให้ใช้ API แทน localStorage
   const handleAddBlog = async (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Adding blog with data:", formData)
+    e.preventDefault();
+    console.log("Adding blog with data:", formData);
 
     try {
-      // สร้างข้อมูลใหม่
-      const newBlog = {
-        title: formData.title,
-        excerpt: formData.excerpt,
-        fullContent: formData.fullContent || formData.excerpt,
-        imageUrl: formData.imageUrl || "/placeholder.svg?height=300&width=500",
-        readTime: formData.readTime || "5 นาที",
-        category: formData.category,
-        slug: formData.slug || formData.title.toLowerCase().replace(/\s+/g, "-"),
-      }
+      const form = new FormData();
+      form.append("title", formData.title);
+      form.append("excerpt", formData.excerpt);
+      form.append("fullContent", formData.fullContent || formData.excerpt);
+      form.append("readTime", formData.readTime || "5 นาที");
+      form.append("category", formData.category);
+      form.append(
+        "slug",
+        formData.slug || formData.title.toLowerCase().replace(/\s+/g, "-")
+      );
 
-      // ส่งข้อมูลไปยัง API
+      imageFiles.forEach((file) => {
+        form.append("images", file);
+      });
+
       const response = await fetch("/api/blogs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newBlog),
-      })
+        body: form,
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to create blog")
+        throw new Error("Failed to create blog");
       }
 
       // รีเซ็ตฟอร์ม
@@ -122,36 +145,43 @@ export default function BlogsPage() {
         readTime: "",
         category: "",
         slug: "",
-      })
-
-      setIsAddDialogOpen(false)
-      loadBlogs() // โหลดข้อมูลใหม่หลังจากเพิ่มข้อมูล
+      });
+      setImageFiles([]);
+      setIsAddDialogOpen(false);
+      loadBlogs();
 
       toast({
         title: "สำเร็จ",
         description: "เพิ่มบทความเรียบร้อยแล้ว",
-      })
+      });
     } catch (error) {
-      console.error("Error adding blog:", error)
+      console.error("Error adding blog:", error);
       toast({
         title: "เกิดข้อผิดพลาด",
-        description: "ไม่สามารถเพิ่มบทความได้: " + (error instanceof Error ? error.message : String(error)),
+        description:
+          "ไม่สามารถเพิ่มบทความได้: " +
+          (error instanceof Error ? error.message : String(error)),
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
   // แก้ไขฟังก์ชัน handleEditBlog ให้ใช้ API แทน localStorage
   const handleEditBlog = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!currentBlog) return
+    if (!currentBlog) return;
 
     try {
       // ตรวจสอบและแก้ไข URL รูปภาพ
-      let imageUrl = formData.imageUrl
+      let imageUrl = formData.imageUrl;
       if (!imageUrl || imageUrl.trim() === "") {
-        imageUrl = "/placeholder.svg?height=300&width=500"
+        imageUrl = "/placeholder.svg?height=300&width=500";
       }
 
       const updatedBlog = {
@@ -161,8 +191,9 @@ export default function BlogsPage() {
         imageUrl: imageUrl,
         readTime: formData.readTime || "5 นาที",
         category: formData.category,
-        slug: formData.slug || formData.title.toLowerCase().replace(/\s+/g, "-"),
-      }
+        slug:
+          formData.slug || formData.title.toLowerCase().replace(/\s+/g, "-"),
+      };
 
       // ส่งข้อมูลไปยัง API
       const response = await fetch(`/api/blogs/${currentBlog.id}`, {
@@ -171,28 +202,28 @@ export default function BlogsPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedBlog),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to update blog")
+        throw new Error("Failed to update blog");
       }
 
-      loadBlogs()
+      loadBlogs();
 
-      setIsEditDialogOpen(false)
+      setIsEditDialogOpen(false);
       toast({
         title: "สำเร็จ",
         description: "แก้ไขบทความเรียบร้อยแล้ว",
-      })
+      });
     } catch (error) {
-      console.error("Error updating blog:", error)
+      console.error("Error updating blog:", error);
       toast({
         title: "เกิดข้อผิดพลาด",
         description: "ไม่สามารถแก้ไขบทความได้",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   // แก้ไขฟังก์ชัน handleDelete ให้ใช้ API แทน localStorage
   const handleDelete = async (id: string) => {
@@ -200,30 +231,30 @@ export default function BlogsPage() {
       try {
         const response = await fetch(`/api/blogs/${id}`, {
           method: "DELETE",
-        })
+        });
 
         if (!response.ok) {
-          throw new Error("Failed to delete blog")
+          throw new Error("Failed to delete blog");
         }
 
-        loadBlogs()
+        loadBlogs();
         toast({
           title: "สำเร็จ",
           description: "ลบบทความเรียบร้อยแล้ว",
-        })
+        });
       } catch (error) {
-        console.error("Error deleting blog:", error)
+        console.error("Error deleting blog:", error);
         toast({
           title: "เกิดข้อผิดพลาด",
           description: "ไม่สามารถลบบทความได้",
           variant: "destructive",
-        })
+        });
       }
     }
-  }
+  };
 
   const handleEdit = (blog: BlogData) => {
-    setCurrentBlog(blog)
+    setCurrentBlog(blog);
     setFormData({
       title: blog.title,
       excerpt: blog.excerpt,
@@ -232,9 +263,9 @@ export default function BlogsPage() {
       readTime: blog.readTime,
       category: blog.category,
       slug: blog.slug,
-    })
-    setIsEditDialogOpen(true)
-  }
+    });
+    setIsEditDialogOpen(true);
+  };
 
   const openAddDialog = () => {
     // รีเซ็ตฟอร์มก่อนเปิด dialog
@@ -246,9 +277,9 @@ export default function BlogsPage() {
       readTime: "",
       category: "",
       slug: "",
-    })
-    setIsAddDialogOpen(true)
-  }
+    });
+    setIsAddDialogOpen(true);
+  };
 
   return (
     <AuthCheck>
@@ -274,7 +305,9 @@ export default function BlogsPage() {
                   <p className="mt-2 text-gray-500">กำลังโหลดข้อมูล...</p>
                 </div>
               ) : blogs.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">ไม่พบบทความ</div>
+                <div className="text-center py-8 text-gray-500">
+                  ไม่พบบทความ
+                </div>
               ) : (
                 <div className="overflow-x-auto">
                   <Table>
@@ -284,16 +317,36 @@ export default function BlogsPage() {
                         <TableHead>หมวดหมู่</TableHead>
                         <TableHead>วันที่</TableHead>
                         <TableHead>เวลาอ่าน</TableHead>
+                        <TableHead>รูปภาพ</TableHead>
                         <TableHead className="text-right">จัดการ</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {blogs.map((blog) => (
                         <TableRow key={blog.id}>
-                          <TableCell className="font-medium">{blog.title}</TableCell>
+                          <TableCell className="font-medium">
+                            {blog.title}
+                          </TableCell>
                           <TableCell>{blog.category}</TableCell>
                           <TableCell>{blog.date}</TableCell>
                           <TableCell>{blog.readTime}</TableCell>
+                          <TableCell>
+                            <div className="flex -space-x-2 overflow-hidden">
+                              {blog.images?.slice(0, 3).map((img, index) => (
+                                <img
+                                  key={index}
+                                  src={img.url}
+                                  alt={`Image ${index}`}
+                                  className="inline-block h-12 w-12 rounded border-2 border-white object-cover shadow-sm"
+                                />
+                              ))}
+                              {blog.images.length > 3 && (
+                                <div className="h-12 w-12 rounded-full bg-gray-200 text-xs flex items-center justify-center border-2 border-white">
+                                  +{blog.images.length - 3}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end space-x-2">
                               <Button
@@ -390,16 +443,17 @@ export default function BlogsPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imageUrl">URL รูปภาพ</Label>
+              <Label htmlFor="imageFile">เลือกรูปภาพ</Label>
               <Input
-                id="imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleInputChange}
-                placeholder="ใส่ URL รูปภาพ (ถ้าไม่ระบุจะใช้รูปตัวอย่าง)"
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFilesChange}
               />
+
               <p className="text-xs text-gray-500">
-                ตัวอย่าง URL: https://example.com/image.jpg หรือ /placeholder.svg?height=300&width=500
+                ตัวอย่าง URL: https://example.com/image.jpg หรือ
+                /placeholder.svg?height=300&width=500
               </p>
             </div>
             <div className="space-y-2">
@@ -413,7 +467,11 @@ export default function BlogsPage() {
               />
             </div>
             <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddDialogOpen(false)}
+              >
                 ยกเลิก
               </Button>
               <Button type="submit">บันทึก</Button>
@@ -496,7 +554,8 @@ export default function BlogsPage() {
                 placeholder="ใส่ URL รูปภาพ (ถ้าไม่ระบุจะใช้รูปตัวอย่าง)"
               />
               <p className="text-xs text-gray-500">
-                ตัวอย่าง URL: https://example.com/image.jpg หรือ /placeholder.svg?height=300&width=500
+                ตัวอย่าง URL: https://example.com/image.jpg หรือ
+                /placeholder.svg?height=300&width=500
               </p>
             </div>
             <div className="space-y-2">
@@ -510,7 +569,11 @@ export default function BlogsPage() {
               />
             </div>
             <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsEditDialogOpen(false)}
+              >
                 ยกเลิก
               </Button>
               <Button type="submit">บันทึก</Button>
@@ -519,5 +582,5 @@ export default function BlogsPage() {
         </DialogContent>
       </Dialog>
     </AuthCheck>
-  )
+  );
 }

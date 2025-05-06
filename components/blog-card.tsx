@@ -1,28 +1,33 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Calendar, Clock } from "lucide-react"
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Clock } from "lucide-react";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // แก้ไข interface โดยเพิ่ม fullContent
 interface BlogCardProps {
-  title: string
-  excerpt: string
-  imageUrl: string
-  date: string
-  readTime: string
-  category: string
-  slug: string
-  fullContent?: string
+  title: string;
+  excerpt: string;
+  imageUrls: string[];
+  date: string;
+  readTime: string;
+  category: string;
+  slug: string;
+  fullContent?: string;
 }
 
 export default function BlogCard({
   title,
   excerpt,
-  imageUrl,
+  imageUrls,
   date,
   readTime,
   category,
@@ -30,43 +35,62 @@ export default function BlogCard({
   fullContent,
 }: BlogCardProps) {
   // เพิ่ม state สำหรับควบคุมการเปิด/ปิด Modal
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // ตรวจสอบว่า imageUrl มีค่าหรือไม่ และกำหนดค่าเริ่มต้นถ้าไม่มี
-  const imageSrc = imageUrl || "/placeholder.svg?height=300&width=500"
+  // const imageSrc = imageUrl || "/placeholder.svg?height=300&width=500";
 
   // ใช้ fullContent ถ้ามี หรือใช้ excerpt ถ้าไม่มี
-  const displayFullContent = fullContent || excerpt
-
-  console.log("Blog card image URL:", imageSrc)
-
+  const displayFullContent = fullContent || excerpt;
+  console.log("🚀 imageUrls for", title, ":", imageUrls);
   return (
     <>
       <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
         <div className="relative h-40 sm:h-48 w-full">
           <Image
-            src={imageSrc || "/placeholder.svg"}
+            src={
+              Array.isArray(imageUrls) && imageUrls[currentImageIndex]
+                ? imageUrls[currentImageIndex]
+                : "/placeholder.svg"
+            }
             alt={title}
             fill
             className="object-cover"
-            onError={(e) => {
-              console.error("Error loading image:", imageSrc)
-              // ถ้าโหลดรูปไม่สำเร็จ ให้ใช้รูป placeholder แทน
-              e.currentTarget.src = "/placeholder.svg?height=300&width=500"
-            }}
           />
         </div>
+        {Array.isArray(imageUrls) && imageUrls.length > 1 && (
+          <div className="flex justify-center mt-2 gap-1">
+            {imageUrls.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentImageIndex(idx);
+                }}
+                className={`w-2 h-2 rounded-full ${
+                  idx === currentImageIndex ? "bg-blue-500" : "bg-gray-300"
+                }`}
+              ></button>
+            ))}
+          </div>
+        )}
         <CardContent className="p-4 sm:p-6 flex flex-col flex-grow">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
-            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 text-xs w-fit">{category}</Badge>
+            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 text-xs w-fit">
+              {category}
+            </Badge>
             <div className="flex items-center text-gray-500 text-xs">
               <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
               <span>{date}</span>
             </div>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">{title}</h3>
-          <p className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-3 flex-grow">{excerpt}</p>
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+            {title}
+          </h3>
+          <p className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-3 flex-grow">
+            {excerpt}
+          </p>
 
           <div className="flex items-center justify-between mt-auto">
             <div className="flex items-center text-gray-500 text-xs">
@@ -92,11 +116,35 @@ export default function BlogCard({
           </DialogHeader>
 
           <div className="relative h-64 sm:h-80 w-full mb-4">
-            <Image src={imageSrc || "/placeholder.svg"} alt={title} fill className="object-cover rounded-md" />
+            <Image
+              src={
+                Array.isArray(imageUrls) && imageUrls[currentImageIndex]
+                  ? imageUrls[currentImageIndex]
+                  : "/placeholder.svg"
+              }
+              alt={title}
+              fill
+              className="object-cover"
+            />
           </div>
 
+          {Array.isArray(imageUrls) && imageUrls.length > 1 && (
+            <div className="flex justify-center mt-2 gap-1">
+              {imageUrls.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  className={`w-2 h-2 rounded-full ${
+                    idx === currentImageIndex ? "bg-blue-500" : "bg-gray-300"
+                  }`}
+                ></button>
+              ))}
+            </div>
+          )}
           <div className="flex items-center justify-between mb-4">
-            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">{category}</Badge>
+            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">
+              {category}
+            </Badge>
             <div className="flex items-center gap-4">
               <div className="flex items-center text-gray-500 text-sm">
                 <Calendar className="h-4 w-4 mr-1" />
@@ -119,5 +167,5 @@ export default function BlogCard({
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

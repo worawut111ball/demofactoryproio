@@ -54,21 +54,7 @@ export default function TabContent({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-2 sm:px-0 mb-8">
                 {[
-                  {
-                    title: "Availability",
-                    description: "วัดเวลาที่เครื่องจักรพร้อมใช้งานเทียบกับเวลาทั้งหมดที่วางแผนไว้",
-                    percentage: "90%",
-                  },
-                  {
-                    title: "Performance",
-                    description: "วัดความเร็วในการทำงานของเครื่องจักรเทียบกับความเร็วที่ออกแบบไว้",
-                    percentage: "95%",
-                  },
-                  {
-                    title: "Quality",
-                    description: "วัดจำนวนชิ้นงานที่ได้คุณภาพเทียบกับจำนวนชิ้นงานทั้งหมดที่ผลิต",
-                    percentage: "99%",
-                  },
+                
                 ].map((factor, i) => (
                   <div
                     key={i}
@@ -92,7 +78,7 @@ export default function TabContent({
                   width={1200}
                   height={800}
                   animation="zoom"
-                  className="w-full h-auto rounded-lg shadow-lg"
+                  className="w-full h-auto rounded-lg "
                 />
               </div>
             </div>

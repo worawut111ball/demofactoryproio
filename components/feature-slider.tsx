@@ -174,22 +174,22 @@ export default function FeatureSlider() {
       {/* Navigation Arrows - Moved to top */}
       <div className="flex justify-center mb-8 space-x-4">
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-          <Button
+          {/* <Button
             onClick={handlePrev}
             aria-label="Previous slide"
             className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-none shadow-md hover:shadow-lg"
           >
             <ChevronLeft className="h-6 w-6" />
-          </Button>
+          </Button> */}
         </motion.div>
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-          <Button
+          {/* <Button
             onClick={handleNext}
             aria-label="Next slide"
             className="h-12 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-none shadow-md hover:shadow-lg"
           >
             <ChevronRight className="h-6 w-6" />
-          </Button>
+          </Button> */}
         </motion.div>
       </div>
 
@@ -222,10 +222,10 @@ export default function FeatureSlider() {
                       height={400}
                       className="w-full h-auto transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                       <h3 className="text-white font-bold text-xl mb-2">{feature.title}</h3>
                       <p className="text-white/90 text-sm line-clamp-3">{feature.description}</p>
-                    </div>
+                    </div> */}
                   </div>
                 </motion.div>
               ))}
@@ -259,7 +259,7 @@ export default function FeatureSlider() {
       </div>
 
       {/* Feature Info with improved styling */}
-      <motion.div
+      {/* <motion.div
         className="mt-12 text-center max-w-3xl mx-auto px-4 py-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -282,7 +282,7 @@ export default function FeatureSlider() {
         >
           {features[activeIndex].description}
         </motion.p>
-      </motion.div>
+      </motion.div> */}
     </div>
   )
 }

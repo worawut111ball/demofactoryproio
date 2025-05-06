@@ -21,6 +21,7 @@ import AnimatedCounter from "@/components/animated-counter"
 import AnimatedImage from "@/components/animated-image"
 import { motion } from "framer-motion"
 import TabContent from "@/components/tab-content"
+import ClientLogoSlider from "@/components/client-logo-slider"
 
 // ประเภทข้อมูลสำหรับรีวิวจากลูกค้า
 interface TestimonialData {
@@ -52,7 +53,7 @@ export default function Home() {
   const [blogs, setBlogs] = useState<BlogData[]>([])
   const [testimonialPage, setTestimonialPage] = useState(1)
   const [blogPage, setBlogPage] = useState(1)
-  const itemsPerPage = 6
+  const itemsPerPage = 3
   const [activeTab, setActiveTab] = useState<"OEE" | "FacScan" | "FacRobot">("OEE")
 
   useEffect(() => {
@@ -89,100 +90,7 @@ export default function Home() {
     loadBlogs()
   }, [])
 
-  // ข้อมูลรีวิวเริ่มต้นในกรณีที่ไม่มีข้อมูลในระบบ
-  const defaultTestimonials: TestimonialData[] = [
-    {
-      id: "1",
-      content:
-        "Factory Pro ช่วยให้เราสามารถเพิ่มประสิทธิภาพการผลิตได้อย่างมาก เราสามารถติดตามและวิเคราะห์ข้อมูลได้แบบเรียลไทม์ ทำให้แก้ไขปัญหาได้ทันท่วงที",
-      fullContent:
-        "Factory Pro ช่วยให้เราสามารถเพิ่มประสิทธิภาพการผลิตได้อย่างมาก เราสามารถติดตามและวิเคราะห์ข้อมูลได้แบบเรียลไทม์ ทำให้แก้ไขปัญหาได้ทันท่วงที\n\nหลังจากใช้งานมาเป็นเวลา 6 เดือน เราสามารถลดเวลาหยุดเครื่องจักรได้ถึง 15% และเพิ่มผลผลิตได้ 20% โดยไม่ต้องเพิ่มทรัพยากรใดๆ ระบบใช้งานง่าย ทีมงานเข้าใจได้เร็ว และการสนับสนุนจากทีมงาน Factory Pro ก็ยอดเยี่ยมมาก\n\nเรายังประทับใจกับความยืดหยุ่นของระบบที่สามารถปรับให้เข้ากับกระบวนการผลิตเฉพาะของเราได้ ทำให้เราสามารถติดตามตัวชี้วัดที่สำคัญสำหรับธุรกิจของเราได้อย่างแม่นยำ",
-      author: "สมชาย ใจดี",
-      position: "ผู้จัดการฝ่ายผลิต",
-      company: "บริษัท อุตสาหกรรมไทย จำกัด",
-      rating: 5,
-      avatarUrl: "/thoughtful-portrait.png",
-    },
-    {
-      id: "2",
-      content:
-        "ระบบใช้งานง่าย ไม่ซับซ้อน ทีมงานให้การสนับสนุนดีมาก มีการอบรมการใช้งานอย่างละเอียด ทำให้พนักงานของเราสามารถใช้งานได้อย่างมีประสิทธิภาพ",
-      fullContent:
-        "ระบบใช้งานง่าย ไม่ซับซ้อน ทีมงานให้การสนับสนุนดีมาก มีการอบรมการใช้งานอย่างละเอียด ทำให้พนักงานของเราสามารถใช้งานได้อย่างมีประสิทธิภาพ\n\nเราประทับใจมากกับความเอาใจใส่ของทีมงาน Factory Pro ที่คอยช่วยเหลือและแนะนำการใช้งานอย่างใกล้ชิด ทำให้การเปลี่ยนผ่านจากระบบเดิมเป็นไปอย่างราบรื่น ไม่กระทบต่อการผลิต\n\nนอกจากนี้ การอัปเดตและพัฒนาระบบอย่างต่อเนื่องทำให้เรามั่นใจว่าเรากำลังใช้เทคโนโลยีที่ทันสมัยที่สุดในการติดตามและปรับปรุงกระบวนการผลิตของเรา",
-      author: "วิภา สมบูรณ์",
-      position: "CEO",
-      company: "บริษัท ไทยเทค จำกัด",
-      rating: 4,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-    {
-      id: "3",
-      content:
-        "หลังจากใช้ Factory Pro เรามองเห็นปัญหาในกระบวนการผลิตที่ไม่เคยเห็นมาก่อน ทำให้สามารถปรับปรุงและเพิ่ม OEE ได้ถึง 20% ภายในเวลาเพียง 3 เดือน",
-      fullContent:
-        "หลังจากใช้ Factory Pro เรามองเห็นปัญหาในกระบวนการผลิตที่ไม่เคยเห็นมาก่อน ทำให้สามารถปรับปรุงและเพิ่ม OEE ได้ถึง 20% ภายในเวลาเพียง 3 เดือน\n\nข้อมูลเชิงลึกที่ได้จากระบบช่วยให้เราสามารถระบุคอขวดในกระบวนการผลิตและแก้ไขปัญหาได้อย่างตรงจุด ส่งผลให้ประสิทธิภาพการผลิตโดยรวมเพิ่มขึ้นอย่างมีนัยสำคัญ\n\nการวิเคราะห์แบบเรียลไทม์ยังช่วยให้เราสามารถตอบสนองต่อปัญหาได้ทันที ลดเวลาหยุดเครื่องจักรและเพิ่มผลผลิตโดยรวม เรารู้สึกว่าการลงทุนในระบบ Factory Pro คุ้มค่ามากและคาดว่าจะได้รับผลตอบแทนจากการลงทุนภายในเวลาไม่ถึงหนึ่งปี",
-      author: "ประพันธ์ มั่นคง",
-      position: "ผู้อำนวยการฝ่ายปฏิบัติการ",
-      company: "บริษัท นวัตกรรมการผลิต จำกัด",
-      rating: 5,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-    {
-      id: "4",
-      content: "การวิเคราะห์ข้อมูลแบบเรียลไทม์ช่วยให้เราตัดสินใจได้รวดเร็วและแม่นยำมากขึ้น ส่งผลให้ลดเวลาหยุดเครื่องจักรได้ถึง 15%",
-      fullContent:
-        "การวิเคราะห์ข้อมูลแบบเรียลไทม์ช่วยให้เราตัดสินใจได้รวดเร็วและแม่นยำมากขึ้น ส่งผลให้ลดเวลาหยุดเครื่องจักรได้ถึง 15%\n\nก่อนหน้านี้ เราต้องรอให้เกิดปัญหาก่อนจึงจะสามารถแก้ไขได้ แต่ด้วยระบบ Factory Pro เราสามารถคาดการณ์ปัญหาที่อาจเกิดขึ้นและดำเนินการป้องกันล่วงหน้า ทำให้กระบวนการผลิตของเราราบรื่นมากขึ้น\n\nนอกจากนี้ การมีข้อมูลที่แม่นยำและเป็นปัจจุบันยังช่วยให้เราสามารถวางแผนการบำรุงรักษาเชิงป้องกันได้อย่างมีประสิทธิภาพมากขึ้น ลดความเสี่ยงของการหยุดเครื่องจักรโดยไม่ได้วางแผนและยืดอายุการใช้งานของอุปกรณ์",
-      author: "มนตรี วิศวกร",
-      position: "วิศวกรอุตสาหการ",
-      company: "บริษัท ไทยแมนูแฟคเจอริ่ง จำกัด",
-      rating: 5,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-    {
-      id: "5",
-      content: "ระบบรายงานของ Factory Pro ช่วยให้เราเห็นภาพรวมของการผลิตได้ชัดเจน ทำให้วางแผนการผลิตได้มีประสิทธิภาพมากขึ้น",
-      fullContent:
-        "ระบบรายงานของ Factory Pro ช่วยให้เราเห็นภาพรวมของการผลิตได้ชัดเจน ทำให้วางแผนการผลิตได้มีประสิทธิภาพมากขึ้น\n\nแดชบอร์ดที่ปรับแต่งได้ช่วยให้เราสามารถติดตามตัวชี้วัดที่สำคัญสำหรับธุรกิจของเราได้อย่างง่ายดาย และรายงานอัตโนมัติช่วยประหยัดเวลาในการรวบรวมและวิเคราะห์ข้อมูล\n\nเรายังประทับใจกับความสามารถในการส่งออกข้อมูลในรูปแบบต่างๆ ทำให้เราสามารถแบ่งปันข้อมูลกับผู้มีส่วนได้ส่วนเสียทั้งภายในและภายนอกองค์กรได้อย่างง่ายดาย การมีข้อมูลที่ถูกต้องและเป็นปัจจุบันช่วยให้ทุกคนในองค์กรสามารถทำงานร่วมกันเพื่อบรรลุเป้าหมายการผลิตได้อย่างมีประสิทธิภาพ",
-      author: "สุนิสา ผู้จัดการ",
-      position: "ผู้จัดการฝ่ายวางแผน",
-      company: "บริษัท ไทยโปรดักชั่น จำกัด",
-      rating: 4,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-    {
-      id: "6",
-      content: "การเชื่อมต่อกับระบบ ERP เดิมของเราทำได้อย่างราบรื่น ไม่มีปัญหาในการใช้งานร่วมกัน ทำให้การทำงานเป็นไปอย่างต่อเนื่อง",
-      fullContent:
-        "การเชื่อมต่อกับระบบ ERP เดิมของเราทำได้อย่างราบรื่น ไม่มีปัญหาในการใช้งานร่วมกัน ทำให้การทำงานเป็นไปอย่างต่อเนื่อง\n\nทีมงานของ Factory Pro ทำงานอย่างใกล้ชิดกับทีม IT ของเราเพื่อให้แน่ใจว่าการบูรณาการระบบเป็นไปอย่างราบรื่น และข้อมูลสามารถไหลระหว่างระบบได้อย่างถูกต้องและเป็นปัจจุบัน\n\nการมี API ที่ยืดหยุ่นและเอกสารที่ครบถ้วนช่วยให้เราสามารถปรับแต่งการเชื่อมต่อให้เหมาะกับความต้องการเฉพาะของเราได้ และการสนับสนุนทางเทคนิคที่รวดเร็วช่วยให้เราสามารถแก้ไขปัญหาที่อาจเกิดขึ้นได้อย่างทันท่วงที",
-      author: "วิชัย เทคโนโลยี",
-      position: "ผู้จัดการฝ่าย IT",
-      company: "บริษัท ไทยอินดัสเทรียล จำกัด",
-      rating: 5,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-    {
-      id: "7",
-      content: "ทีมงานสนับสนุนของ Factory Pro ให้บริการได้อย่างรวดเร็วและมีประสิทธิภาพ ช่วยแก้ไขปัญหาได้ทันท่วงที",
-      fullContent:
-        "ทีมงานสนับสนุนของ Factory Pro ให้บริการได้อย่างรวดเร็วและมีประสิทธิภาพ ช่วยแก้ไขปัญหาได้ทันท่วงที\n\nเมื่อเราพบปัญหาในการใช้งานระบบ ทีมงานสนับสนุนตอบสนองอย่างรวดเร็วและให้คำแนะนำที่เป็นประโยชน์ในการแก้ไขปัญหา ทำให้เราสามารถกลับมาใช้งานระบบได้อย่างรวดเร็ว\n\nนอกจากนี้ ทีมงานยังเป็นเชิงรุกในการให้คำแนะนำเกี่ยวกับวิธีการใช้งานระบบให้เกิดประโยชน์สูงสุด และแจ้งให้เราทราบเกี่ยวกับคุณสมบัติใหม่ๆ ที่อาจเป็นประโยชน์ต่อธุรกิจของเรา การสนับสนุนที่ดีเยี่ยมนี้ทำให้เรารู้สึกว่าเราไม่ได้เป็นเพียงลูกค้า แต่เป็นพันธมิตรที่ทำงานร่วมกันเพื่อปรับปรุงกระบวนการผลิตของเรา",
-      author: "นภา ผู้ประกอบการ",
-      position: "เจ้าของกิจการ",
-      company: "บริษัท สมอลแมนูแฟคเจอริ่ง จำกัด",
-      rating: 5,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-    {
-      id: "8",
-      content: "การติดตั้งระบบทำได้รวดเร็วและไม่รบกวนกระบวนการผลิต ทีมงานมืออาชีพและเข้าใจความต้องการของเราเป็นอย่างดี",
-      fullContent:
-        "การติดตั้งระบบทำได้รวดเร็วและไม่รบกวนกระบวนการผลิต ทีมงานมืออาชีพและเข้าใจความต้องการของเราเป็นอย่างดี\n\nเรากังวลว่าการติดตั้งระบบใหม่อาจส่งผลกระทบต่อการผลิตของเรา แต่ทีมงานของ Factory Pro วางแผนกระบวนการติดตั้งอย่างรอบคอบและดำเนินการในช่วงเวลาที่มีผลกระทบน้อยที่สุดต่อการดำเนินงานของเรา\n\nนอกจากนี้ ทีมงานยังใช้เวลาในการทำความเข้าใจกระบวนการผลิตและความต้องการเฉพาะของเรา ทำให้สามารถกำหนดค่าระบบให้เหมาะกับความต้องการของเราได้อย่างแม่นยำ การฝึกอบรมที่ครอบคลุมและเอกสารที่ละเอียดช่วยให้ทีมงานของเราสามารถเริ่มใช้งานระบบได้อย่างรวดเร็วและมั่นใจ",
-      author: "สมศักดิ์ วิศวกรรม",
-      position: "หัวหน้าฝ่ายวิศวกรรม",
-      company: "บริษัท ไทยแมนูแฟคเจอริ่ง จำกัด",
-      rating: 4,
-      avatarUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HuDmy3KyMHyfqQPMn0fPE58Rn36Z50.png",
-    },
-  ]
+
 
   // ข้อมูลบทความเริ่มต้นในกรณีที่ไม่มีข้อมูลในระบบ
   const defaultBlogs: BlogData[] = [
@@ -293,7 +201,7 @@ export default function Home() {
   ]
 
   // ใช้ข้อมูลจาก localStorage ถ้ามี หรือใช้ข้อมูลเริ่มต้นถ้าไม่มี
-  const displayTestimonials = testimonials.length > 0 ? testimonials : defaultTestimonials
+  // const displayTestimonials = testimonials.length > 0 ? testimonials : defaultTestimonials
   const displayBlogs = blogs.length > 0 ? blogs : defaultBlogs
 
   return (
@@ -348,15 +256,15 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 1 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-end"
               >
-                <Button className="bg-blue-500 hover:bg-blue-600 text-white border-0 rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                {/* <Button className="bg-blue-500 hover:bg-blue-600 text-white border-0 rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300">
                   ทดลองใช้ฟรี
-                </Button>
-                <Button
+                </Button> */}
+                {/* <Button
                   variant="outline"
                   className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border-white/20 rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg"
                 >
                   ดูการสาธิต
-                </Button>
+                </Button> */}
               </motion.div>
             </div>
           </div>
@@ -371,7 +279,7 @@ export default function Home() {
         <div className="container mx-auto px-4 overflow-hidden">
           <AnimatedSection>
             <div className="max-w3xl mx-auto text-center mb-16">
-              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">เกี่ยวกับเรา</Badge>
+              {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">เกี่ยวกับเรา</Badge> */}
               <AnimatedText
                 text="แพลทฟอร์มการเชื่อมต่ออุตสาหกรรมอัจฉริยะสำหรับ SMEs"
                 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 break-words hyphens-auto px-2"
@@ -461,7 +369,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+      <section className="py-16 bg-gradient-to-br ">
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <div className="text-center mb-10">
@@ -534,7 +442,7 @@ export default function Home() {
             <AnimatedSection delay={0.4} direction="right">
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-400/10 to-blue-600/10 rounded-2xl blur opacity-10"></div>
-                <div className="relative overflow-hidden rounded-2xl shadow-sm">
+                <div className="relative overflow-hidden rounded-2xl ">
                   <AnimatedImage
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/App-AWVGPTc39PRKsKJvmzEeQnGhnY7ZiE.png"
                     alt="Factory Pro Dashboard"
@@ -631,7 +539,7 @@ export default function Home() {
           <div className="container mx-auto px-4 overflow-hidden">
             <AnimatedSection>
               <div className="max-w-3xl mx-auto text-center mb-16">
-                <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30">Platform</Badge>
+                {/* <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30">Platform</Badge> */}
                 <AnimatedText
                   text="แพลตฟอร์มที่ครบครันสำหรับอุตสาหกรรม"
                   className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 break-words hyphens-auto px-2"
@@ -666,7 +574,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <div className="max-w-3xl mx-auto text-center mb-16">
-              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">บริการของเรา</Badge>
+              {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">บริการของเรา</Badge> */}
               <div className="mb-6">
                 <AnimatedImage
                   src="/images/OurServices.png"
@@ -693,26 +601,26 @@ export default function Home() {
             {[
               {
                 image: "/images/service1.png",
-                title: "การติดตั้งระบบและอบรม",
-                description: "บริการติดตั้งและตั้งค่าระบบ Factory Pro ให้เหมาะสมกับความต้องการของธุรกิจคุณ",
+                // title: "การติดตั้งระบบและอบรม",
+                // description: "บริการติดตั้งและตั้งค่าระบบ Factory Pro ให้เหมาะสมกับความต้องการของธุรกิจคุณ",
                 delay: 0.2,
               },
               {
                 image: "/images/service2.png",
-                title: "ทีมงานผู้เชี่ยวชาญ",
-                description: "บริการให้คำปรึกษาเพื่อช่วยให้คุณสามารถใช้ประโยชน์จากข้อมูล OEE ในการปรับปรุงกระบวนการผลิต",
+                // title: "ทีมงานผู้เชี่ยวชาญ",
+                // description: "บริการให้คำปรึกษาเพื่อช่วยให้คุณสามารถใช้ประโยชน์จากข้อมูล OEE ในการปรับปรุงกระบวนการผลิต",
                 delay: 0.4,
               },
               {
                 image: "/images/service3.png",
-                title: "บริการหลังการขาย",
-                description: "บริการฝึกอบรมทีมงานของคุณให้สามารถใช้งานระบบได้อย่างมีประสิทธิภาพ พร้อมการสนับสนุนตลอด 24/7",
+                // title: "บริการหลังการขาย",
+                // description: "บริการฝึกอบรมทีมงานของคุณให้สามารถใช้งานระบบได้อย่างมีประสิทธิภาพ พร้อมการสนับสนุนตลอด 24/7",
                 delay: 0.6,
               },
             ].map((service, i) => (
               <AnimatedSection key={i} delay={service.delay} direction="up">
-                <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  <div className="h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+               
+                  {/* <div className="h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div> */}
                   <CardContent className="p-8">
                     <motion.div
                       className="flex justify-center mb-6"
@@ -730,7 +638,7 @@ export default function Home() {
                     <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{service.title}</h3>
                     <p className="text-gray-600 text-center">{service.description}</p>
                   </CardContent>
-                </Card>
+              
               </AnimatedSection>
             ))}
           </div>
@@ -759,7 +667,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <AnimatedSection>
               <div className="max-w-3xl mx-auto text-center mb-16">
-                <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">แพ็คเกจราคา</Badge>
+                {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">แพ็คเกจราคา</Badge> */}
                 <AnimatedText
                   text="เลือกแพ็คเกจที่เหมาะกับธุรกิจของคุณ"
                   className="text-3xl sm:text-4xl font-bold text-white mb-6"
@@ -818,7 +726,7 @@ export default function Home() {
               ))}
             </div>
 
-            <AnimatedSection delay={0.8}>
+            {/* <AnimatedSection delay={0.8}>
               <div className="mt-12 text-center">
                 <p className="text-white mb-4">ไม่แน่ใจว่าแพ็คเกจไหนเหมาะกับคุณ?</p>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -827,68 +735,8 @@ export default function Home() {
                   </Button>
                 </motion.div>
               </div>
-            </AnimatedSection>
+            </AnimatedSection> */}
           </div>
-        </div>
-      </section>
-
-      {/* Recommends Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-        <span id="recommends" className="section-anchor"></span>
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12 md:mb-16">
-              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">รีวิวจากลูกค้า</Badge>
-              <AnimatedText
-                text="ลูกค้าของเราพูดถึงเราอย่างไร"
-                className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6"
-                type="words"
-                animation="fade"
-                delay={0.2}
-              />
-              <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-4 sm:mb-6 rounded-full"></div>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                className="text-base sm:text-lg text-gray-600"
-              >
-                ความคิดเห็นจากลูกค้าที่ใช้บริการของเรา
-              </motion.p>
-            </div>
-          </AnimatedSection>
-
-          {/* ปรับปรุงส่วนนี้เพื่อให้ card มีขนาดเท่ากัน */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 auto-rows-fr">
-            {displayTestimonials
-              .slice((testimonialPage - 1) * itemsPerPage, testimonialPage * itemsPerPage)
-              .map((testimonial, i) => (
-                <AnimatedSection key={testimonial.id} delay={0.2 + i * 0.2} direction="up" className="h-full">
-                  <motion.div whileHover={{ y: -10, transition: { duration: 0.3 } }} className="h-full">
-                    <TestimonialCard
-                      content={testimonial.content}
-                      author={testimonial.author}
-                      position={testimonial.position}
-                      company={testimonial.company}
-                      rating={testimonial.rating}
-                      avatarUrl={testimonial.avatarUrl}
-                      id={testimonial.id}
-                      fullContent={testimonial.fullContent}
-                    />
-                  </motion.div>
-                </AnimatedSection>
-              ))}
-          </div>
-
-          {displayTestimonials.length > itemsPerPage && (
-            <AnimatedSection delay={0.8}>
-              <Pagination
-                currentPage={testimonialPage}
-                totalPages={Math.ceil(displayTestimonials.length / itemsPerPage)}
-                onPageChange={setTestimonialPage}
-              />
-            </AnimatedSection>
-          )}
         </div>
       </section>
 
@@ -898,7 +746,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12 md:mb-16">
-              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">บทความ</Badge>
+              {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">บทความ</Badge> */}
               <AnimatedText
                 text="บทความและข่าวสารล่าสุด"
                 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6"
@@ -947,7 +795,7 @@ export default function Home() {
             </AnimatedSection>
           )}
 
-          <AnimatedSection delay={0.8}>
+          {/* <AnimatedSection delay={0.8}>
             <div className="text-center mt-8 sm:mt-12">
               {displayBlogs.length > itemsPerPage ? (
                 <div className="mt-4">
@@ -965,9 +813,157 @@ export default function Home() {
                 </motion.div>
               )}
             </div>
-          </AnimatedSection>
+          </AnimatedSection> */}
         </div>
       </section>
+
+      {/* Partners Section */}
+      <section className="py-16">
+        <span id="partners" className="section-anchor"></span>
+        <div className="container mx-auto px-4">
+          <AnimatedSection>
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">Trusted by</Badge> */}
+              <AnimatedText
+                text="Trusted by"
+                className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                type="words"
+                animation="fade"
+                delay={0.2}
+              />
+             
+              <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-6 rounded-full"></div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="text-base sm:text-lg text-gray-600"
+              >
+                Official Partners and Collaborators
+              </motion.p>
+            </div>
+          </AnimatedSection>
+
+          <div className="flex flex-wrap justify-center items-center">
+            <AnimatedSection delay={0.3}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                // className="m-6 p-8 rounded-lg "
+              >
+                <Image
+                  src="/images/clients/client-4.webp"
+                  alt="SCG Logo"
+                  width={200}
+                  height={100}
+                  className="h-auto w-auto object-contain"
+                />
+              </motion.div>
+            </AnimatedSection>
+          </div>
+        </div>
+          {/* Clients Section */}
+      <div className="py-16 bg-white">
+        <span id="clients" className="section-anchor"></span>
+        <div className="container mx-auto px-4">
+          <AnimatedSection>
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">Our Clients</Badge> */}
+              <AnimatedText
+                text="Our Clients Companies That Trust Us"
+                className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                type="words"
+                animation="fade"
+                delay={0.2}
+              />
+              <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-6 rounded-full"></div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="text-base sm:text-lg text-gray-600"
+              >
+                We are proud to work with these leading organizations
+              </motion.p>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.4}>
+            <ClientLogoSlider
+              clients={[
+                {
+                  name: "KMUTNB",
+                  logo: "/images/clients/client-1.webp",
+                  alt: "KMUTNB Logo",
+                },
+                {
+                  name: "Thai Government",
+                  logo: "/images/clients/client-2.webp",
+                  alt: "Thai Government Logo",
+                },
+                {
+                  name: "Udonthani Cancer Hospital",
+                  logo: "/images/clients/client-3.webp",
+                  alt: "Udonthani Cancer Hospital Logo",
+                },
+                {
+                  name: "SCG",
+                  logo: "/images/clients/client-4.webp",
+                  alt: "SCG Logo",
+                },
+                {
+                  name: "NAWA Plastic",
+                  logo: "/images/clients/client-5.webp",
+                  alt: "NAWA Plastic Logo",
+                },
+                {
+                  name: "Eastwater",
+                  logo: "/images/clients/client-6.webp",
+                  alt: "Eastwater Logo",
+                },
+                {
+                  name: "Universal Utilities Group",
+                  logo: "images/clients/client-7.webp",
+                  alt: "Universal Utilities Group Logo",
+                },
+                {
+                  name: "IBCON",
+                  logo: "images/clients/client-8.webp",
+                  alt: "IBCON Logo",
+                },
+                {
+                  name: ".nt",
+                  logo: "images/clients/client-9.webp",
+                  alt: "nt Logo",
+                },
+                {
+                  name: "VEKIN",
+                  logo: "images/clients/client-10.webp",
+                  alt: "VEKIN Logo",
+                },
+                {
+                  name: "SEN",
+                  logo: "images/clients/client-11.webp",
+                  alt: "SEN Logo",
+                },
+                {
+                  name: "THI",
+                  logo: "images/clients/client-12.webp",
+                  alt: "THI Logo",
+                },
+                {
+                  name: "ARROW",
+                  logo: "images/clients/client-13.webp",
+                  alt: "ARROW Logo",
+                },
+              ]}
+            />
+          </AnimatedSection>
+        </div>
+      </div>
+      </section>
+
+    
 
       {/* Contact Section */}
       <section className="py-20 relative">
@@ -983,7 +979,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Badge className="mb-4 bg-white text-orange-600 hover:bg-white/90">ติดต่อเรา</Badge>
+                {/* <Badge className="mb-4 bg-white text-orange-600 hover:bg-white/90">ติดต่อเรา</Badge> */}
                 <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">ปรึกษาและขอใบเสนอราคา</h2>
                 <div className="h-1 w-20 bg-white mb-6 rounded-full"></div>
                 <p className="text-lg text-white mb-8">

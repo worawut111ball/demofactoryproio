@@ -26,7 +26,19 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
       }
 
       // Check which section is currently in view
-      const sections = ["home", "about", "platform", "OEE", "services", "pricing", "recommends", "blogs", "contact"]
+      const sections = [
+        "home",
+        "about",
+        "platform",
+        "OEE",
+        "services",
+        "pricing",
+        "recommends",
+        "blogs",
+        "partners",
+        "clients",
+        "contact",
+      ]
 
       // Special handling for home section - active when at the top of the page
       if (window.scrollY < 100) {
@@ -125,14 +137,15 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
   }
 
   const navItems = [
-    { href: "#home", label: "หน้าแรก" },
-    { href: "#about", label: "เกี่ยวกับเรา" },
+    { href: "#home", label: "Home" },
+    { href: "#about", label: "About" },
     // Platform dropdown will be handled separately
-    { href: "#services", label: "บริการ" },
-    { href: "#pricing", label: "ราคา" },
-    { href: "#recommends", label: "รีวิวจากลูกค้า" },
-    { href: "#blogs", label: "บทความ" },
-    { href: "#contact", label: "ติดต่อ" },
+    { href: "#services", label: "Services" },
+    { href: "#pricing", label: "Package" },
+    { href: "#blogs", label: "Portfolio" },
+    // { href: "#partners", label: "พาร์ทเนอร์" },
+    // { href: "#clients", label: "ลูกค้าของเรา" },
+    // { href: "#contact", label: "ติดต่อ" },
   ]
 
   return (
@@ -145,10 +158,10 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
 
           <nav className="hidden md:flex items-center space-x-8">
             <ScrollLink href="#home" className={`font-medium hover:text-blue-400 transition-colors`}>
-              หน้าแรก
+            Home
             </ScrollLink>
             <ScrollLink href="#about" className={`font-medium hover:text-blue-400 transition-colors`}>
-              เกี่ยวกับเรา
+            About
             </ScrollLink>
 
             {/* Platform dropdown menu */}
@@ -188,20 +201,23 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
             </div>
 
             <ScrollLink href="#services" className={`font-medium hover:text-blue-400 transition-colors`}>
-              บริการ
+            Services
             </ScrollLink>
             <ScrollLink href="#pricing" className={`font-medium hover:text-blue-400 transition-colors`}>
-              ราคา
-            </ScrollLink>
-            <ScrollLink href="#recommends" className={`font-medium hover:text-blue-400 transition-colors`}>
-              รีวิวจากลูกค้า
+            Package
             </ScrollLink>
             <ScrollLink href="#blogs" className={`font-medium hover:text-blue-400 transition-colors`}>
-              บทความ
+            Portfolio
             </ScrollLink>
-            <ScrollLink href="#contact" className={`font-medium hover:text-blue-400 transition-colors`}>
+            {/* <ScrollLink href="#partners" className={`font-medium hover:text-blue-400 transition-colors`}>
+              พาร์ทเนอร์
+            </ScrollLink> */}
+            {/* <ScrollLink href="#clients" className={`font-medium hover:text-blue-400 transition-colors`}>
+              ลูกค้าของเรา
+            </ScrollLink> */}
+            {/* <ScrollLink href="#contact" className={`font-medium hover:text-blue-400 transition-colors`}>
               ติดต่อ
-            </ScrollLink>
+            </ScrollLink> */}
           </nav>
 
           <button
@@ -223,13 +239,13 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
                 href="#home"
                 className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
               >
-                หน้าแรก
+                Home
               </ScrollLink>
               <ScrollLink
                 href="#about"
                 className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
               >
-                เกี่ยวกับเรา
+                About
               </ScrollLink>
 
               {/* Platform dropdown for mobile */}
@@ -272,32 +288,38 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
                 href="#services"
                 className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
               >
-                บริการ
+                Services
               </ScrollLink>
               <ScrollLink
                 href="#pricing"
                 className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
               >
-                ราคา
-              </ScrollLink>
-              <ScrollLink
-                href="#recommends"
-                className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
-              >
-                รีวิวจากลูกค้า
+                Package
               </ScrollLink>
               <ScrollLink
                 href="#blogs"
                 className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
               >
-                บทความ
+                Portfolio
               </ScrollLink>
-              <ScrollLink
+              {/* <ScrollLink
+                href="#partners"
+                className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
+              >
+                พาร์ทเนอร์
+              </ScrollLink> */}
+              {/* <ScrollLink
+                href="#clients"
+                className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
+              >
+                ลูกค้าของเรา
+              </ScrollLink> */}
+              {/* <ScrollLink
                 href="#contact"
                 className="font-medium hover:text-blue-400 py-3 px-2 text-sm rounded-md hover:bg-blue-50"
               >
                 ติดต่อ
-              </ScrollLink>
+              </ScrollLink> */}
             </nav>
           </div>
         </div>

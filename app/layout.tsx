@@ -8,9 +8,9 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Factory Pro - แพลตฟอร์มการเชื่อมต่ออุตสาหกรรมอัจฉริยะ",
+  title: "Factory Pro ",
   description: "แพลตฟอร์ม OEE ที่ช่วยวัดและวิเคราะห์ประสิทธิภาพโดยรวมของเครื่องจักรในกระบวนการผลิต",
-    generator: 'v0.dev'
+    generator: 'FactoryPro.io'
 }
 
 export default function RootLayout({

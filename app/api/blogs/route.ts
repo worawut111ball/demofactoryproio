@@ -1,39 +1,75 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { blogs } from "@/lib/db-utils"
+import { writeFile, mkdir } from "fs/promises"
+import path from "path"
 
-// GET /api/blogs - ดึงข้อมูลบทความทั้งหมด
+// GET: ดึง blog พร้อมภาพทั้งหมด
 export async function GET() {
   try {
-    const data = await blogs.findAll()
-    return NextResponse.json(data)
+    const data = await prisma.blog.findMany({
+      include: { images: true },
+      orderBy: { date: "desc" },
+    });
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Failed to fetch blogs:", error)
-    return NextResponse.json({ error: "Failed to fetch blogs" }, { status: 500 })
+    console.error("Failed to fetch blogs:", error);
+    return NextResponse.json({ error: "Failed to fetch blogs" }, { status: 500 });
   }
 }
 
-// POST /api/blogs - เพิ่มข้อมูลบทความใหม่
+// POST: ใหม่ รองรับ multipart/form-data
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const formData = await request.formData();
 
-    // สร้างข้อมูลใหม่
-    const newBlog = {
-      title: body.title,
-      excerpt: body.excerpt,
-      fullContent: body.fullContent || body.excerpt,
-      imageUrl: body.imageUrl || "/placeholder.svg?height=300&width=500",
-      date: new Date(), // ใช้วันที่ปัจจุบัน
-      readTime: body.readTime || "5 นาที",
-      category: body.category,
-      slug: body.slug || body.title.toLowerCase().replace(/\s+/g, "-"),
+    const title = formData.get("title") as string;
+    const excerpt = formData.get("excerpt") as string;
+    const fullContent = (formData.get("fullContent") as string) || excerpt;
+    const readTime = (formData.get("readTime") as string) || "5 นาที";
+    const category = formData.get("category") as string;
+    const slug =
+      (formData.get("slug") as string) || title.toLowerCase().replace(/\s+/g, "-");
+
+    const images = formData.getAll("images") as File[];
+    const uploadedUrls: string[] = [];
+
+    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    await mkdir(uploadDir, { recursive: true });
+
+    for (const image of images) {
+      const buffer = Buffer.from(await image.arrayBuffer());
+      const filename = `${Date.now()}-${image.name}`;
+      const filepath = path.join(uploadDir, filename);
+      await writeFile(filepath, buffer);
+      uploadedUrls.push(`/uploads/${filename}`);
     }
 
-    // เพิ่มข้อมูลใหม่
-    const blog = await blogs.create(newBlog)
-    return NextResponse.json(blog, { status: 201 })
+    const blog = await prisma.blog.create({
+      data: {
+        title,
+        excerpt,
+        fullContent,
+        readTime,
+        category,
+        slug,
+        date: new Date(),
+        imageUrl: uploadedUrls[0] || "/placeholder.svg",
+        images: {
+          createMany: {
+            data: uploadedUrls.map((url) => ({ url })),
+          },
+        },
+      },
+      include: { images: true },
+    });
+
+    return NextResponse.json(blog, { status: 201 });
   } catch (error) {
-    console.error("Failed to create blog:", error)
-    return NextResponse.json({ error: "Failed to create blog" }, { status: 500 })
+    console.error("Failed to create blog with images:", error);
+    return NextResponse.json(
+      { error: "Failed to create blog" },
+      { status: 500 }
+    );
   }
 }

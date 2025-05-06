@@ -127,7 +127,24 @@ export const blogs = {
   },
   create: (data: Prisma.BlogCreateInput) => addData<Prisma.BlogGetPayload<{}>>("Blog", data),
   update: (id: string, data: Prisma.BlogUpdateInput) => updateData<Prisma.BlogGetPayload<{}>>("Blog", id, data),
-  delete: (id: string) => deleteData<Prisma.BlogGetPayload<{}>>("Blog", id),
+  delete: async (id: string) => {
+    try {
+      // ลบภาพที่อ้างอิง blogId ก่อน
+      await prisma.image.deleteMany({
+        where: { blogId: id },
+      });
+
+      // แล้วค่อยลบ blog
+      await prisma.blog.delete({
+        where: { id },
+      });
+
+      return true;
+    } catch (error) {
+      console.error("Error deleting blog and its images:", error);
+      return false;
+    }
+  },
 }
 
 export const testimonials = {

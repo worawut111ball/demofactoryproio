@@ -132,7 +132,7 @@ export default function ContactForm() {
     <Card className="w-full border-0 shadow-xl bg-gradient-to-br from-blue-50 to-cyan-50">
       <CardHeader className="pb-2">
         <CardTitle className="text-2xl font-bold text-gray-900">
-          ปรึกษาและขอใบเสนอราคา
+        ปรึกษาและขอคำเเนะนำจากเรา
         </CardTitle>
         <CardDescription>
           กรอกข้อมูลของคุณเพื่อรับการติดต่อกลับจากทีมงานของเรา

@@ -54,8 +54,8 @@ export default function Home() {
   const [testimonialPage, setTestimonialPage] = useState(1);
   const [blogPage, setBlogPage] = useState(1);
   const itemsPerPage = 3;
-  const [activeTab, setActiveTab] = useState<"OEE" | "FacScan" | "FacRobot">(
-    "OEE"
+  const [activeTab, setActiveTab] = useState<"FacOEE" | "FacWMS" | "FacGreen">(
+    "FacOEE"
   );
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -63,7 +63,7 @@ export default function Home() {
         const res = await fetch("/api/blogs");
         const data = await res.json();
         console.log("Fetched data:", data);
-  
+
         // ตรวจสอบว่า data เป็นอาร์เรย์หรือไม่
         const formatted = Array.isArray(data)
           ? data.map((blog) => ({
@@ -71,18 +71,18 @@ export default function Home() {
               imageUrls: blog.images?.map((img) => img.url) || [],
             }))
           : [];
-  
+
         const sortedData = [...formatted].sort((a, b) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
-  
+
         setBlogs(sortedData);
       } catch (error) {
         console.error("Error fetching blogs from API:", error);
         setBlogs([]);
       }
     };
-  
+
     fetchBlogs();
   }, []);
 
@@ -206,7 +206,7 @@ export default function Home() {
         "ปัญญาประดิษฐ์ (AI) สามารถช่วยในการคาดการณ์เมื่อเครื่องจักรจะต้องการการบำรุงรักษา บทความนี้จะอธิบายวิธีการใช้ AI ในการคาดการณ์การบำรุงรักษาเพื่อลดเวลาหยุดทำงานของเครื่องจักร",
       fullContent:
         "ปัญญาประดิษฐ์ (AI) สามารถช่วยในการคาดการณ์เมื่อเครื่องจักรจะต้องการการบำรุงรักษา บทความนี้จะอธิบายวิธีการใช้ AI ในการคาดการณ์การบำรุงรักษาเพื่อลดเวลาหยุดทำงานของเครื่องจักร\n\nความสำคัญของการคาดการณ์การบำรุงรักษา\nการคาดการณ์การบำรุงรักษาช่วยให้ผู้ผลิตสามารถวางแผนการบำรุงรักษาได้อย่างมีประสิทธิภาพ โดยการคาดการณ์เมื่อเครื่องจักรจะต้องการการบำรุงรักษา ผู้ผลิตสามารถลดเวลาหยุดทำงาน ลดต้นทุนการซ่อมแซม และเพิ่มประสิทธิภาพการผลิต\n\nวิธีการใช้ AI ในการคาดการณ์การบำรุงรักษา\n1. รวบรวมข้อมูล: รวบรวมข้อมูลจากเซ็นเซอร์เครื่องจักร ระบบควบคุม และฐานข้อมูลการผลิต\n2. วิเคราะห์ข้อมูล: ใช้ AI และการเรียนรู้ของเครื่องในการวิเคราะห์ข้อมูลและระบุรูปแบบ\n3. สร้างแบบจำลอง: สร้างแบบจำลองที่สามารถคาดการณ์เมื่อเครื่องจักรจะต้องการการบำรุงรักษา\n4. ทดสอบแบบจำลอง: ทดสอบแบบจำลองและปรับปรุงตามความจำเป็น\n5. นำไปใช้: นำแบบจำลองไปใช้ในการวางแผนการบำรุงรักษา\n\nประโยชน์ของการใช้ AI ในการคาดการณ์การบำรุงรักษา\n1. ลดเวลาหยุดทำงาน: การคาดการณ์การบำรุงรักษาช่วยลดเวลาหยุดทำงานโดยการวางแผนการบำรุงรักษาล่วงหน้า\n2. ลดต้นทุน: การคาดการณ์การบำรุงรักษาช่วยลดต้นทุนการซ่อมแซมโดยการป้องกันความเสียหาย\n3. เพิ่มประสิทธิภาพ: การคาดการณ์การบำรุงรักษาช่วยเพิ่มประสิทธิภาพการผลิตโดยการลดเวลาหยุดทำงาน\n4. ปรับปรุงความปลอดภัย: การคาดการณ์การบำรุงรักษาช่วยปรับปรุงความปลอดภัยในการทำงานโดยการป้องกันอุบัติเหตุ\n\nความท้าทายในการใช้ AI ในการคาดการณ์การบำรุงรักษา\n1. ข้อมูล: การใช้ AI ต้องการข้อมูลจำนวนมากและมีคุณภาพสูง\n2. ความเชี่ยวชาญ: การใช้ AI ต้องการความเชี่ยวชาญในการวิเคราะห์ข้อมูลและการสร้างแบบจำลอง\n3. การเปลี่ยนแปลง: การนำ AI มาใช้ต้องมีการเปลี่ยนแปลงในกระบวนการทำงานและวัฒนธรรมองค์กร",
-      imageUrls:[ "/ai-maintenance-team.png"],
+      imageUrls: ["/ai-maintenance-team.png"],
       date: "5 ต.ค. 2022",
       readTime: "8 นาที",
       category: "AI",
@@ -237,7 +237,7 @@ export default function Home() {
       {/* แสดง NavBar ในทุกกรณี */}
       <NavBar setActiveTab={setActiveTab} />
 
-      {/* Hero Section */}
+      {/* Home Section */}
       <section className="relative overflow-hidden min-h-screen flex items-center">
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
@@ -259,7 +259,7 @@ export default function Home() {
         {/* Update the Hero section content div: */}
         <div className="container relative mx-auto px-4 py-12 sm:py-16 md:py-20 flex items-center min-h-screen">
           <div className="grid grid-cols-1 gap-8 sm:gap-12 items-center w-full">
-            <div className="space-y-4 sm:space-y-6 text-center sm:text-right sm:ml-auto max-w-2xl">
+            <div className="space-y-4 sm:space-y-6 text-center sm:text-right sm:ml-auto max-w-3xl">
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -271,8 +271,8 @@ export default function Home() {
                 </span>
               </motion.div>
               <AnimatedText
-                text="ยกระดับการผลิตด้วย OEE อัจฉริยะ"
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white drop-shadow-md"
+                text="Factory PRO"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-8xl font-bold leading-tight text-white drop-shadow-md"
                 type="words"
                 animation="slide"
                 delay={0.3}
@@ -281,13 +281,14 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.8 }}
-                className="text-base sm:text-lg md:text-xl text-white/90 max-w-xl mx-auto sm:ml-auto backdrop-blur-[2px] rounded-lg p-2 bg-black/5"
+                // className="text-base sm:text-2xl md:text-3xl lg:text-4xl text-white/90 max-w-xl mx-auto sm:ml-auto backdrop-blur-[2px] rounded-lg p-2 "
+                className="text-base sm:text-2xl md:text-3xl lg:text-4xl text-white/90 max-w-9xl mx-auto sm:ml-auto backdrop-blur-[2px] rounded-lg p-2"
               >
-                แพลตฟอร์ม{" "}
-                <span className="font-bold">
-                  Overall Equipment Effectiveness
-                </span>{" "}
-                ที่ช่วยวัดและวิเคราะห์ประสิทธิภาพโดยรวมของเครื่องจักรในกระบวนการผลิต
+                <span className="font-bold text-blue-700">Factory PRO</span> คือ
+                แพลตฟอร์มอัจฉริยะสำหรับการบริหารจัดการการผลิต ด้วย{" "}
+                <span className="font-bold text-blue-700">loT, Big Data</span>{" "}
+                และ <span className="font-bold text-blue-700">AI</span>{" "}
+                เพื่อเพิ่มประสิทธิกาพ ลดต้นทุน และ รองรับโรงงานยุค 4.0
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -308,112 +309,251 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
+        {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div> */}
       </section>
 
       {/* About Section */}
-      <section className="py-20 bg-white">
-        <span id="about" className="section-anchor"></span>
-        <div className="container mx-auto px-4 overflow-hidden">
-          <AnimatedSection>
-            <div className="max-w3xl mx-auto text-center mb-16">
-              {/* <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200">เกี่ยวกับเรา</Badge> */}
-              <AnimatedText
-                text="แพลทฟอร์มการเชื่อมต่ออุตสาหกรรมอัจฉริยะสำหรับ SMEs"
-                className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 break-words hyphens-auto px-2"
-                type="words"
-                animation="fade"
-                delay={0.2}
-              />
-              <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-6 rounded-full"></div>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                className="text-lg text-gray-600"
-              >
-                แพลตฟอร์ม{" "}
-                <span className="font-semibold text-blue-700">OEE</span> หรือ{" "}
-                <span className="font-semibold text-blue-700">
-                  Overall Equipment Effectiveness
-                </span>{" "}
-                ที่ใช้สำหรับวัดและวิเคราะห์ประสิทธิภาพโดยรวมของเครื่องจักรในกระบวนการผลิต
-                ช่วยให้ผู้ผลิตสามารถระบุจุดอ่อนและโอกาสในการปรับปรุงประสิทธิภาพการผลิต
-              </motion.p>
+      <section
+        id="about"
+        className="relative overflow-hidden min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-50 to-gray-100 py-16"
+      >
+        <div className="container mx-auto px-4 z-10">
+          <AnimatedSection className="mb-12">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="">
+                <AnimatedImage
+                  src="/FactoryPRO_02.png"
+                  alt="Our Services"
+                  width={800}
+                  height={100}
+                  animation="fade"
+                  className="mx-auto h-auto"
+                />
+              </div>
+              {/* <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-6 rounded-full"></div> */}
+              {/* <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="text-lg text-gray-600"
+        >
+          เรามีบริการครบวงจรเพื่อช่วยให้คุณสามารถเพิ่มประสิทธิภาพการผลิตได้อย่างเต็มที่
+        </motion.p> */}
             </div>
           </AnimatedSection>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <AnimatedSection
-              className="order-2 lg:order-1"
-              delay={0.2}
-              direction="left"
-            >
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    เพิ่มประสิทธิภาพการผลิต
-                  </h3>
-                  <ul className="space-y-3">
-                    {[
-                      "เพิ่ม OEE ได้สูงสุด 15%",
-                      "ข้อมูลเป็นเรียลไทม์ ตรวจสอบได้ทันที",
-                      "ข้อมูลมีความแม่นยำสูง ลดความผิดพลาดของมนุษย์",
-                      "วิเคราะห์ปัญหาได้ทันท่วงที",
-                    ].map((item, i) => (
-                      <motion.li
-                        key={i}
-                        className="flex items-start"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                      >
-                        <ArrowUpCircle className="h-6 w-6 text-emerald-500 mr-2 flex-shrink-0" />
-                        <span className="text-gray-700">{item}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
+        {/* Background Elements */}
+        <div className="absolute inset-0 w-full h-full">
+          <div className="absolute inset-0 opacity-10 bg-grid-pattern"></div>
+        </div>
 
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    ลดความผิดพลาด
-                  </h3>
-                  <ul className="space-y-3">
-                    {[
-                      "ลดการลงข้อมูลในเอกสารผิดพลาด",
-                      "ลดการลงข้อมูลในระบบผิดพลาด",
-                      "ลดต้นทุนได้ 10% และเพิ่มผลกำไร 20%",
-                    ].map((item, i) => (
-                      <motion.li
-                        key={i}
-                        className="flex items-start"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.6 + i * 0.1 }}
-                      >
-                        <Info className="h-6 w-6 text-amber-500 mr-2 flex-shrink-0" />
-                        <span className="text-gray-700">{item}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
+        {/* Floating technology icons with better positioning */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-32 left-16 animate-float-slow">
+            <div className="bg-blue-500 bg-opacity-20 backdrop-blur-sm p-4 rounded-full">
+              <svg
+                className="w-8 h-8 text-blue-600"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-18c4.411 0 8 3.589 8 8s-3.589 8-8 8-8-3.589-8-8 3.589-8 8-8zm-3 6a1 1 0 100 2 1 1 0 000-2zm6 0a1 1 0 100 2 1 1 0 000-2zm-5.793 6.207a1 1 0 011.414-1.414A3.001 3.001 0 0115 15a1 1 0 11-2 0 1 1 0 00-1-1 1 1 0 00-1 1 1 1 0 01-1.793.207z" />
+              </svg>
+            </div>
+          </div>
+          <div className="absolute top-1/2 right-16 animate-float-medium">
+            <div className="bg-green-500 bg-opacity-20 backdrop-blur-sm p-3 rounded-full">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M21 2H3a1 1 0 00-1 1v18a1 1 0 001 1h18a1 1 0 001-1V3a1 1 0 00-1-1zm-1 18H4V4h16v16z" />
+                <path d="M9 8H7v2h2V8zm0 4H7v4h2v-4zm4-4h-2v2h2V8zm0 4h-2v4h2v-4zm4-4h-2v2h2V8zm0 4h-2v4h2v-4z" />
+              </svg>
+            </div>
+          </div>
+          <div className="absolute top-2/3 left-1/4 animate-float-fast">
+            <div className="bg-purple-500 bg-opacity-20 backdrop-blur-sm p-3 rounded-full">
+              <svg
+                className="w-7 h-7 text-purple-600"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 16a4 4 0 100-8 4 4 0 000 8z" />
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+              </svg>
+            </div>
+          </div>
+          {/* <div className="absolute top-1/3 right-1/4 animate-float-medium">
+      <div className="bg-blue-500 bg-opacity-20 backdrop-blur-sm p-3 rounded-full">
+        <svg
+          className="w-6 h-6 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 10V3L4 14h7v7l9-11h-7z"
+          />
+        </svg>
+      </div>
+    </div> */}
+        </div>
+
+        {/* Hero animation component */}
+        <HeroAnimation />
+
+        {/* Main content container */}
+        <div className="container relative mx-auto px-4 flex-grow z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center w-full">
+            {/* Left column - Vision & Mission */}
+            <div className="space-y-6 backdrop-blur-sm bg-white/40 p-8 rounded-xl border border-gray-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-2xl font-semibold text-blue-700 flex items-center">
+                <svg
+                  className="w-6 h-6 mr-2 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+                Our Vision
+              </h3>
+              <p className="text-gray-700">
+                ปฏิวัติการผลิตด้วยเทคโนโลยีล้ำสมัย
+                เพื่อสร้างอนาคตที่ยั่งยืนและมีประสิทธิภาพสูงสุดสำหรับโรงงานทุกขนาด
+              </p>
+              <br /> <br />
+              <h3 className="text-2xl font-semibold text-blue-700 pt-4 flex items-center">
+                <svg
+                  className="w-6 h-6 mr-2 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                Mission
+              </h3>
+              <ul className="space-y-4">
+                <li className="flex items-start">
+                  <span className="mr-2 text-green-500 flex-shrink-0 mt-1 bg-green-100 p-1 rounded-full">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span>เพิ่มประสิทธิภาพการผลิตแบบก้าวกระโดด</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 text-green-500 flex-shrink-0 mt-1 bg-green-100 p-1 rounded-full">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span>ลดต้นทุนการดำเนินงานอย่างมีนัยสำคัญ</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 text-green-500 flex-shrink-0 mt-1 bg-green-100 p-1 rounded-full">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span>ตัดสินใจบนพื้นฐานของข้อมูลเชิงลึกแบบเรียลไทม์</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 text-green-500 flex-shrink-0 mt-1 bg-green-100 p-1 rounded-full">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span>ก้าวทันการเปลี่ยนแปลงของอุตสาหกรรม 4.0</span>
+                </li>
+              </ul>
+              <br />
+              <br /> <br />
+              <div className="pt-6 mt-2 border-t border-gray-100">
+                <p className="italic text-gray-600">
+                  Factory PRO ไม่ใช่เพียงแค่ซอฟต์แวร์
+                  แต่เป็นพันธมิตรที่จะช่วยให้ธุรกิจของคุณเติบโตอย่างชาญฉลาดและยั่งยืน
+                </p>
               </div>
-            </AnimatedSection>
+            </div>
+
+            {/* Right column - Main title and description */}
             <AnimatedSection
               className="order-1 lg:order-2"
               delay={0.4}
               direction="right"
             >
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl blur opacity-30"></div>
-                <div className="relative overflow-hidden rounded-2xl shadow-xl">
+                {/* <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl blur opacity-30"></div> */}
+                <div className="relative overflow-hidden rounded-2xl  transform hover:scale-[1.01] transition-transform duration-300">
                   <AnimatedImage
-                    src="/pform.png"
+                    src="/4-steps-hl.png"
                     alt="Factory Pro Engineers Working"
                     width={600}
-                    height={500}
+                    height={400}
+                    animation="zoom"
+                    delay={0.2}
+                  />
+                  <br />
+                  <AnimatedImage
+                    src="/4-steps.png"
+                    alt="Factory Pro Engineers Working"
+                    width={600}
+                    height={400}
                     animation="zoom"
                     delay={0.2}
                   />
@@ -422,179 +562,160 @@ export default function Home() {
             </AnimatedSection>
           </div>
         </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-br ">
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                ผลลัพธ์ที่คุณจะได้รับ
-              </h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-6 rounded-full"></div>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
-            <AnimatedSection delay={0.2} direction="left">
-              <ul className="space-y-6">
-                <motion.li
-                  className="flex items-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  <div className="bg-blue-100 p-2 rounded-full mr-4">
-                    <CheckCircle className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">
-                      Finding the reason to lose
-                    </h3>
-                    <p className="text-gray-600">
-                      ค้นหาสาเหตุของการสูญเสียในกระบวนการผลิตได้อย่างรวดเร็ว
-                    </p>
-                  </div>
-                </motion.li>
-                <motion.li
-                  className="flex items-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                >
-                  <div className="bg-green-100 p-2 rounded-full mr-4">
-                    <ArrowUpCircle className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">
-                      Improve Production Efficiency
-                    </h3>
-                    <p className="text-gray-600">
-                      ปรับปรุงประสิทธิภาพการผลิตด้วยข้อมูลเชิงลึกที่แม่นยำ
-                    </p>
-                  </div>
-                </motion.li>
-                <motion.li
-                  className="flex items-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                >
-                  <div className="bg-amber-100 p-2 rounded-full mr-4">
-                    <Info className="h-6 w-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">
-                      Easy to Analyze
-                    </h3>
-                    <p className="text-gray-600">
-                      วิเคราะห์ข้อมูลได้ง่ายด้วยแดชบอร์ดที่ออกแบบมาเพื่อการใช้งานที่สะดวก
-                    </p>
-                  </div>
-                </motion.li>
-                <motion.li
-                  className="flex items-start"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <div className="bg-purple-100 p-2 rounded-full mr-4">
-                    <ArrowUpCircle className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">
-                      Increase OEE
-                    </h3>
-                    <p className="text-gray-600">
-                      เพิ่มค่า OEE
-                      ได้อย่างมีประสิทธิภาพด้วยการติดตามและปรับปรุงอย่างต่อเนื่อง
-                    </p>
-                  </div>
-                </motion.li>
-              </ul>
-            </AnimatedSection>
-            <AnimatedSection delay={0.4} direction="right">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400/10 to-blue-600/10 rounded-2xl blur opacity-10"></div>
-                <div className="relative overflow-hidden rounded-2xl ">
-                  <AnimatedImage
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/App-AWVGPTc39PRKsKJvmzEeQnGhnY7ZiE.png"
-                    alt="Factory Pro Dashboard"
-                    width={1200}
-                    height={800}
-                    animation="slide"
-                    delay={0.2}
-                  />
+        {/* Technology features */}
+        <div className="container mx-auto px-4 mt-12 mb-6 z-10">
+          <div className="backdrop-blur-sm bg-white/50 p-6 rounded-xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+                <div className="bg-blue-600 text-white p-3 rounded-lg">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-blue-800">
+                    IoT Integration
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    เชื่อมต่ออุปกรณ์อัจฉริยะทั่วทั้งโรงงานเพื่อควบคุมและติดตามแบบเรียลไทม์
+                  </p>
                 </div>
               </div>
-            </AnimatedSection>
-
-            {/* เพิ่มส่วนของข้อความสถิติเดิมกลับมา */}
-            <AnimatedSection className="col-span-1 md:col-span-3" delay={0.6}>
-              <div className="grid grid-cols-3 gap-4 max-w-4xl mx-auto mt-8">
-                <motion.div
-                  className="bg-white rounded-lg shadow p-4 text-center transform transition-all duration-300 hover:shadow-md border-t-3 border-blue-500"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <AnimatedCounter
-                    from={0}
-                    to={15}
-                    formatter={(value) => `${value}%`}
-                    className="text-3xl font-bold text-blue-500 mb-1"
-                    delay={0.2}
-                  />
-                  <h3 className="text-sm font-bold text-gray-800 mb-1">
-                    เพิ่ม OEE
-                  </h3>
-                  <p className="text-xs text-gray-600">
-                    เพิ่มประสิทธิภาพโดยรวมของเครื่องจักร
+              <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+                <div className="bg-blue-600 text-white p-3 rounded-lg">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-blue-800">
+                    Big Data Analytics
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    วิเคราะห์ข้อมูลขนาดใหญ่อย่างชาญฉลาดเพื่อหาแนวทางการปรับปรุงที่มีประสิทธิภาพ
                   </p>
-                </motion.div>
-
-                <motion.div
-                  className="bg-white rounded-lg shadow p-4 text-center transform transition-all duration-300 hover:shadow-md border-t-3 border-green-500"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <AnimatedCounter
-                    from={0}
-                    to={10}
-                    formatter={(value) => `${value}%`}
-                    className="text-3xl font-bold text-green-500 mb-1"
-                    delay={0.4}
-                  />
-                  <h3 className="text-sm font-bold text-gray-800 mb-1">
-                    ลดต้นทุน
-                  </h3>
-                  <p className="text-xs text-gray-600">ลดต้นทุนการผลิตโดยรวม</p>
-                </motion.div>
-
-                <motion.div
-                  className="bg-white rounded-lg shadow p-4 text-center transform transition-all duration-300 hover:shadow-md border-t-3 border-amber-500"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <AnimatedCounter
-                    from={0}
-                    to={20}
-                    formatter={(value) => `${value}%`}
-                    className="text-3xl font-bold text-amber-500 mb-1"
-                    delay={0.6}
-                  />
-                  <h3 className="text-sm font-bold text-gray-800 mb-1">
-                    เพิ่มกำไร
-                  </h3>
-                  <p className="text-xs text-gray-600">
-                    เพิ่มผลกำไรจากการปรับปรุงประสิทธิภาพ
-                  </p>
-                </motion.div>
+                </div>
               </div>
-            </AnimatedSection>
+              <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+                <div className="bg-blue-600 text-white p-3 rounded-lg">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-blue-800">
+                    AI Optimization
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    ปรับปรุงกระบวนการด้วยปัญญาประดิษฐ์ที่เรียนรู้และพัฒนาตัวเองอย่างต่อเนื่อง
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Gradient fade at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
+
+        {/* Add this to your CSS for animations */}
+        <style jsx>{`
+          .bg-grid-pattern {
+            background-image: radial-gradient(
+              rgba(0, 0, 150, 0.1) 1px,
+              transparent 1px
+            );
+            background-size: 20px 20px;
+          }
+
+          @keyframes float-slow {
+            0%,
+            100% {
+              transform: translateY(0px);
+            }
+            50% {
+              transform: translateY(-20px);
+            }
+          }
+
+          @keyframes float-medium {
+            0%,
+            100% {
+              transform: translateY(0px);
+            }
+            50% {
+              transform: translateY(-15px);
+            }
+          }
+
+          @keyframes float-fast {
+            0%,
+            100% {
+              transform: translateY(0px);
+            }
+            50% {
+              transform: translateY(-10px);
+            }
+          }
+
+          .animate-float-slow {
+            animation: float-slow 6s ease-in-out infinite;
+          }
+
+          .animate-float-medium {
+            animation: float-medium 4.5s ease-in-out infinite;
+          }
+
+          .animate-float-fast {
+            animation: float-fast 3s ease-in-out infinite;
+          }
+        `}</style>
       </section>
 
       {/* Platform Section with Tabs */}
-      <section className="py-12 sm:py-16 md:py-20 bg-blue-300 text-white relative overflow-hidden">
+      {/* <section className="py-12 sm:py-16 md:py-20 bg-blue-300 text-white relative overflow-hidden"> */}
+      <section
+        className={`py-12 sm:py-16 md:py-20 ${
+          activeTab === "FacWMS"
+            ? "bg-orange-300"
+            : activeTab === "FacGreen"
+            ? "bg-green-300"
+            : activeTab === "FacOEE"
+            ? "bg-blue-300"
+            : "bg-white-300"
+        } text-white relative overflow-hidden`}
+      >
         {/* Background Images */}
         <div className="absolute inset-0 z-0">
           <motion.div
@@ -628,32 +749,10 @@ export default function Home() {
         {/* Content with relative positioning to appear above the background */}
         <div className="relative z-10">
           <span id="platform" className="section-anchor"></span>
-          <span id="OEE" className="section-anchor"></span>
-          <span id="FacScan" className="section-anchor"></span>
-          <span id="FacRobot" className="section-anchor"></span>
+          <span id="FacOEE" className="section-anchor"></span>
+          <span id="FacWMS" className="section-anchor"></span>
+          <span id="FacGreen" className="section-anchor"></span>
           <div className="container mx-auto px-4 overflow-hidden">
-            <AnimatedSection>
-              <div className="max-w-3xl mx-auto text-center mb-16">
-                {/* <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30">Platform</Badge> */}
-                <AnimatedText
-                  text="แพลตฟอร์มที่ครบครันสำหรับอุตสาหกรรม"
-                  className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 break-words hyphens-auto px-2"
-                  type="words"
-                  animation="fade"
-                  delay={0.2}
-                />
-                <div className="h-1 w-20 bg-white mx-auto mb-6 rounded-full"></div>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.7, delay: 0.4 }}
-                  className="text-lg text-white/80"
-                >
-                  เลือกดูแพลตฟอร์มที่ตอบโจทย์ความต้องการของธุรกิจคุณ
-                </motion.p>
-              </div>
-            </AnimatedSection>
-
             <TabContent
               className="bg-white/10 backdrop-blur-sm rounded-xl p-6 md:p-8 shadow-lg"
               activeTab={activeTab}
@@ -697,19 +796,22 @@ export default function Home() {
               {
                 image: "/images/service1.png",
                 title: "การติดตั้งระบบและอบรม",
-                description: "บริการติดตั้งและตั้งค่าระบบ Factory Pro ให้เหมาะสมกับความต้องการของธุรกิจคุณ",
+                description:
+                  "บริการติดตั้งและตั้งค่าระบบ Factory Pro ให้เหมาะสมกับความต้องการของธุรกิจคุณ",
                 delay: 0.2,
               },
               {
                 image: "/images/service2.png",
                 title: "ทีมงานผู้เชี่ยวชาญ",
-                description: "บริการให้คำปรึกษาเพื่อช่วยให้คุณสามารถใช้ประโยชน์จากข้อมูล OEE ในการปรับปรุงกระบวนการผลิต",
+                description:
+                  "บริการให้คำปรึกษาเพื่อช่วยให้คุณสามารถใช้ประโยชน์จากข้อมูล OEE ในการปรับปรุงกระบวนการผลิต",
                 delay: 0.4,
               },
               {
                 image: "/images/service3.png",
                 title: "บริการหลังการขาย",
-                description: "บริการฝึกอบรมทีมงานของคุณให้สามารถใช้งานระบบได้อย่างมีประสิทธิภาพ พร้อมการสนับสนุนตลอด 24/7",
+                description:
+                  "บริการฝึกอบรมทีมงานของคุณให้สามารถใช้งานระบบได้อย่างมีประสิทธิภาพ พร้อมการสนับสนุนตลอด 24/7",
                 delay: 0.6,
               },
             ].map((service, i) => (
@@ -729,20 +831,25 @@ export default function Home() {
                       className="w-auto h-auto"
                     />
                   </motion.div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
+                  {/* <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
                     {service.title}
-                  </h3>
-                  <p className="text-gray-600 text-center">
+                  </h3> */}
+                  {/* <p className="text-gray-600 text-center">
                     {service.description}
-                  </p>
+                  </p> */}
                 </CardContent>
               </AnimatedSection>
             ))}
           </div>
         </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </section>
 
-      {/* Pricing Section */}
+      {/* Package Section */}
       <section className="py-20 relative">
         <div className="absolute inset-0 w-full h-full">
           <Image
@@ -1095,11 +1202,11 @@ export default function Home() {
               <div>
                 {/* <Badge className="mb-4 bg-white text-orange-600 hover:bg-white/90">ติดต่อเรา</Badge> */}
                 <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-                  ปรึกษาและขอใบเสนอราคา
+                  ปรึกษาและขอคำเเนะนำจากเรา
                 </h2>
                 <div className="h-1 w-20 bg-white mb-6 rounded-full"></div>
                 <p className="text-lg text-white mb-8">
-                  กรอกข้อมูลของคุณด้านล่างเพื่อรับการติดต่อกลับจากทีมงานของเรา
+                  กรอกข้อมูลของคุณเพื่อรับการติดต่อกลับจากทีมงานของเรา
                   เราพร้อมให้คำปรึกษาและช่วยเหลือคุณในการเลือกแพ็คเกจที่เหมาะสมกับธุรกิจของคุณ
                 </p>
 
@@ -1109,10 +1216,10 @@ export default function Home() {
                   </h3>
                   <ul className="space-y-3">
                     {[
-                      "เพิ่ม OEE ได้สูงสุด 15%",
-                      "ลดต้นทุนได้ 10%",
-                      "เพิ่มผลกำไร 20%",
-                      "ใช้งานง่าย ไม่ต้องมีความรู้ด้านเทคนิค",
+                      "เพิ่มประสิทธิภาพการผลิตแบบก้าวกระโดด",
+                      "ลดต้นทุนการดำเนินงานอย่างมีนัยสำคัญ",
+                      "ตัดสินใจบนพื้นฐานของข้อมูลเชิงลึกแบบเรียลไทม์",
+                      "ก้าวทันการเปลี่ยนแปลงของอุตสาหกรรม 4.0",
                       "การสนับสนุนจากผู้เชี่ยวชาญตลอด 24/7",
                     ].map((item, i) => (
                       <li key={i} className="flex items-start">
@@ -1123,7 +1230,7 @@ export default function Home() {
                   </ul>
                 </div>
 
-                <div className="flex items-center space-x-4">
+                {/* <div className="flex items-center space-x-4">
                   <Link
                     href="#"
                     className="text-white hover:text-yellow-200 font-medium"
@@ -1137,7 +1244,7 @@ export default function Home() {
                   >
                     คำถามที่พบบ่อย
                   </Link>
-                </div>
+                </div> */}
               </div>
 
               <div>

@@ -74,7 +74,6 @@
     @apply bg-background text-foreground;
     font-family: "Prompt", sans-serif;
   }
-
   /* Responsive font sizes */
   h1 {
     @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl;

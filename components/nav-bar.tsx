@@ -8,7 +8,7 @@ import Image from "next/image"
 import { Menu, X, ChevronDown, ChevronUp } from "lucide-react"
 
 interface NavBarProps {
-  setActiveTab?: (tab: "OEE" | "FacScan" | "FacRobot") => void
+  setActiveTab?: (tab: "FacOEE" | "FacWMS" | "FacGreen") => void
 }
 
 export default function NavBar({ setActiveTab }: NavBarProps) {
@@ -30,14 +30,14 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
         "home",
         "about",
         "platform",
-        "OEE",
+        // "OEE",
         "services",
         "pricing",
-        "recommends",
+        // "recommends",
         "blogs",
-        "partners",
-        "clients",
-        "contact",
+        // "partners",
+        // "clients",
+        // "contact",
       ]
 
       // Special handling for home section - active when at the top of the page
@@ -82,10 +82,10 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
     setActiveSection(sectionId)
     setIsPlatformDropdownOpen(false)
 
-    // ตั้งค่า activeTab เมื่อคลิกที่เมนู OEE, FacScan หรือ FacRobot
-    if (sectionId === "OEE" || sectionId === "FacScan" || sectionId === "FacRobot") {
+    // ตั้งค่า activeTab เมื่อคลิกที่เมนู OEE, FacWMS หรือ FacGreen
+    if (sectionId === "FacOEE" || sectionId === "FacWMS" || sectionId === "FacGreen") {
       if (setActiveTab) {
-        setActiveTab(sectionId as "OEE" | "FacScan" | "FacRobot")
+        setActiveTab(sectionId as "FacOEE" | "FacWMS" | "FacGreen")
       }
     }
 
@@ -100,7 +100,7 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
     const section = document.getElementById(sectionId)
     if (section) {
       // Get the height of the navbar to offset the scroll position
-      const navbarHeight = 80 // Approximate height of the navbar in pixels
+      const navbarHeight = 110 // Approximate height of the navbar in pixels
       const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - navbarHeight
 
       window.scrollTo({
@@ -153,7 +153,7 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/FactoryPRO_02.png" alt="Factory Pro Logo" width={120} height={40} className="h-10 w-auto" />
+            <Image src="/FactoryPRO_02.png" alt="Factory Pro Logo" width={200} height={120} className="h-16 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -170,9 +170,9 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
                 onClick={togglePlatformDropdown}
                 className={`flex items-center font-medium hover:text-blue-400 transition-colors ${
                   activeSection === "platform" ||
-                  activeSection === "OEE" ||
-                  activeSection === "FacScan" ||
-                  activeSection === "FacRobot"
+                  activeSection === "FacOEE" ||
+                  activeSection === "FacWMS" ||
+                  activeSection === "FacGreen"
                     ? "text-blue-600 font-semibold"
                     : "text-gray-700"
                 }`}
@@ -187,14 +187,14 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
 
               {isPlatformDropdownOpen && (
                 <div className="absolute top-full left-0 mt-1 w-48 bg-white shadow-lg rounded-md py-1 z-50">
-                  <ScrollLink href="#OEE" className="block px-4 py-2 hover:bg-blue-50 w-full text-left">
-                    OEE
+                  <ScrollLink href="#FacOEE" className="block px-4 py-2 hover:bg-blue-50 w-full text-left">
+                  FacOEE
                   </ScrollLink>
-                  <ScrollLink href="#FacScan" className="block px-4 py-2 hover:bg-blue-50 w-full text-left">
-                    FacScan
+                  <ScrollLink href="#FacWMS" className="block px-4 py-2 hover:bg-blue-50 w-full text-left">
+                    FacWMS
                   </ScrollLink>
-                  <ScrollLink href="#FacRobot" className="block px-4 py-2 hover:bg-blue-50 w-full text-left">
-                    FacRobot
+                  <ScrollLink href="#FacGreen" className="block px-4 py-2 hover:bg-blue-50 w-full text-left">
+                  FacGreen
                   </ScrollLink>
                 </div>
               )}
@@ -254,9 +254,9 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
                   onClick={togglePlatformDropdown}
                   className={`flex items-center w-full text-left font-medium py-3 px-2 text-sm rounded-md hover:bg-blue-50 ${
                     activeSection === "platform" ||
-                    activeSection === "OEE" ||
-                    activeSection === "FacScan" ||
-                    activeSection === "FacRobot"
+                    activeSection === "FacOEE" ||
+                    activeSection === "FacWMS" ||
+                    activeSection === "FacGreen"
                       ? "text-blue-600 font-semibold bg-blue-50"
                       : "text-gray-700"
                   }`}
@@ -271,14 +271,14 @@ export default function NavBar({ setActiveTab }: NavBarProps) {
 
                 {isPlatformDropdownOpen && (
                   <div className="pl-4 mt-2 space-y-2">
-                    <ScrollLink href="#OEE" className="block py-2 px-3 text-sm rounded-md hover:bg-blue-50">
-                      OEE
+                    <ScrollLink href="#FacOEE" className="block py-2 px-3 text-sm rounded-md hover:bg-blue-50">
+                    FacOEE
                     </ScrollLink>
-                    <ScrollLink href="#FacScan" className="block py-2 px-3 text-sm rounded-md hover:bg-blue-50">
-                      FacScan
+                    <ScrollLink href="#FacWMS" className="block py-2 px-3 text-sm rounded-md hover:bg-blue-50">
+                      FacWMS
                     </ScrollLink>
-                    <ScrollLink href="#FacRobot" className="block py-2 px-3 text-sm rounded-md hover:bg-blue-50">
-                      FacRobot
+                    <ScrollLink href="#FacGreen" className="block py-2 px-3 text-sm rounded-md hover:bg-blue-50">
+                    FacGreen
                     </ScrollLink>
                   </div>
                 )}

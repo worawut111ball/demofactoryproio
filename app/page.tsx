@@ -853,14 +853,14 @@ export default function Home() {
       <section className="py-20 relative">
         <div className="absolute inset-0 w-full h-full">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-cXcVSEF8EbQOf8EjIoRvprSJdbRNZU.png"
+            src="/bgOurService.png"
             alt="Tech Factory Background"
             fill
             className="object-cover"
             priority
           />
           <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-orange-300/60 to-orange-400/50"
+            className="absolute inset-0 bg-gradient-to-br from-orange-300/60 to-orange-600/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -879,7 +879,7 @@ export default function Home() {
                   animation="slide"
                   delay={0.2}
                 />
-                <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto mb-6 rounded-full"></div>
+                <div className="h-1 w-20 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto mb-6 rounded-full"></div>
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

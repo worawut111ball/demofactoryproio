@@ -46,18 +46,29 @@ export async function addData<T>(model: string, data: any): Promise<T> {
 // Generic update function for any model
 export async function updateData<T>(model: string, id: string, data: any): Promise<T | null> {
   try {
-    // @ts-ignore - Dynamic use of prisma client
+    // Prisma ไม่รองรับ push images array ตรงๆ ต้องใช้ create
+    const updatePayload = { ...data };
+
+    // ถ้ามีรูปภาพใหม่ ให้ใช้ nested create
+    if (data.images && Array.isArray(data.images)) {
+      updatePayload.images = {
+        create: data.images,
+      };
+    }
+
+    // @ts-ignore - Dynamic access
     const result = await prisma[model.toLowerCase()].update({
       where: { id },
-      data,
-    })
-    return result as T
+      data: updatePayload,
+      include: { images: true }, // ✅ เพื่อให้ได้ภาพกลับมาด้วย
+    });
+
+    return result as T;
   } catch (error) {
-    console.error(`Error updating data in ${model}:`, error)
-    return null
+    console.error(`Error updating data in ${model}:`, error);
+    return null;
   }
 }
-
 // Generic delete function for any model
 export async function deleteData<T>(model: string, id: string): Promise<boolean> {
   try {

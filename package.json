@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-     "db:setup": "npx ts-node-esm scripts/generate-env.ts"
+    "db:setup": "npx ts-node-esm scripts/generate-env.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -46,6 +46,7 @@
     "cmdk": "1.0.4",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
+    "formidable": "^3.5.4",
     "framer-motion": "latest",
     "fs": "latest",
     "input-otp": "1.4.1",
@@ -65,6 +66,7 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0",
     "vaul": "^0.9.6",
     "zod": "^3.24.1"
   },

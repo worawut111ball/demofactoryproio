@@ -23,6 +23,23 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
+    const images = formData.getAll("images") as File[];
+    console.log(" Received images (raw):", images);
+
+    images.forEach((img, i) => {
+      console.log(`image[${i}]:`, {
+        name: (img as File).name,
+        type: (img as File).type,
+        size: (img as File).size,
+        isFunction: typeof (img as File).arrayBuffer === "function"
+      });
+    });
+
+
+    console.log(" All formData entries:");
+    for (const pair of formData.entries()) {
+      console.log(`• ${pair[0]}:`, pair[1]);
+    }
 
     const title = formData.get("title") as string;
     const excerpt = formData.get("excerpt") as string;
@@ -32,18 +49,57 @@ export async function POST(request: NextRequest) {
     const slug =
       (formData.get("slug") as string) || title.toLowerCase().replace(/\s+/g, "-");
 
-    const images = formData.getAll("images") as File[];
+    if (!title || !excerpt) {
+      return NextResponse.json(
+        { error: "Title and excerpt are required" },
+        { status: 400 }
+      );
+    }
+
+
+    if (!images || images.length === 0) {
+      return NextResponse.json(
+        { error: "No images uploaded" },
+        { status: 400 }
+      );
+    }
     const uploadedUrls: string[] = [];
 
     const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
+    // Create the upload directory if it doesn't exist
+    await mkdir(uploadDir, { recursive: true }).catch((error) => {
+      console.error("Failed to create upload directory:", error);
+      return NextResponse.json(
+        { error: "Failed to create upload directory" },
+        { status: 500 }
+      );
+    });
 
     for (const image of images) {
+      if (typeof image.arrayBuffer !== "function") {
+        console.error("Invalid file object:", image);
+        return NextResponse.json(
+          { error: "Invalid file object" },
+          { status: 400 }
+        );
+      }
+
       const buffer = Buffer.from(await image.arrayBuffer());
       const filename = `${Date.now()}-${image.name}`;
       const filepath = path.join(uploadDir, filename);
-      await writeFile(filepath, buffer);
-      uploadedUrls.push(`/uploads/${filename}`);
+      console.log("💾 กำลังบันทึกไฟล์:", filename, "→", filepath);
+      console.log("✅ บันทึกไฟล์สำเร็จ:", filename);
+
+      try {
+        await writeFile(filepath, buffer);
+        uploadedUrls.push(`/uploads/${filename}`);
+      } catch (error) {
+        console.error(`Failed to save image: ${filename}`, error);
+        return NextResponse.json(
+          { error: "Failed to save image" },
+          { status: 500 }
+        );
+      }
     }
 
     const blog = await prisma.blog.create({
@@ -65,7 +121,12 @@ export async function POST(request: NextRequest) {
       include: { images: true },
     });
 
-    return NextResponse.json(blog, { status: 201 });
+    return NextResponse.json({
+      id: blog.id,
+      title: blog.title,
+      images: blog.images,
+      message: "Blog created successfully",
+    }, { status: 201 });
   } catch (error) {
     console.error("Failed to create blog with images:", error);
     return NextResponse.json(

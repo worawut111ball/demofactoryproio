@@ -57,11 +57,20 @@ export default function BlogsPage() {
   const { toast } = useToast();
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImageFiles(Array.from(e.target.files));
+      console.log("🚀 ~ imageFiles:", imageFiles);
     }
+  };
+  const handleRemoveImage = (urlToRemove: string) => {
+    if (!currentBlog) return;
+    const updatedImages = currentBlog.images.filter(
+      (img) => img.url !== urlToRemove
+    );
+    setCurrentBlog({ ...currentBlog, images: updatedImages });
   };
 
   // แก้ไขฟังก์ชัน loadBlogs ให้ใช้ API แทน localStorage
@@ -124,6 +133,7 @@ export default function BlogsPage() {
       );
 
       imageFiles.forEach((file) => {
+        console.log("🚀 ~ imageFiles.forEach ~ imageFiles:", imageFiles);
         form.append("images", file);
       });
 
@@ -174,52 +184,52 @@ export default function BlogsPage() {
   // แก้ไขฟังก์ชัน handleEditBlog ให้ใช้ API แทน localStorage
   const handleEditBlog = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!currentBlog) return;
 
     try {
-      // ตรวจสอบและแก้ไข URL รูปภาพ
-      let imageUrl = formData.imageUrl;
-      if (!imageUrl || imageUrl.trim() === "") {
-        imageUrl = "/placeholder.svg?height=300&width=500";
-      }
+      const form = new FormData();
+      form.append("title", formData.title);
+      form.append("excerpt", formData.excerpt);
+      form.append("fullContent", formData.fullContent || formData.excerpt);
+      form.append("readTime", formData.readTime || "5 นาที");
+      form.append("category", formData.category);
+      form.append(
+        "slug",
+        formData.slug || formData.title.toLowerCase().replace(/\s+/g, "-")
+      );
 
-      const updatedBlog = {
-        title: formData.title,
-        excerpt: formData.excerpt,
-        fullContent: formData.fullContent || formData.excerpt,
-        imageUrl: imageUrl,
-        readTime: formData.readTime || "5 นาที",
-        category: formData.category,
-        slug:
-          formData.slug || formData.title.toLowerCase().replace(/\s+/g, "-"),
-      };
+      currentBlog.images.forEach((img) => {
+        form.append("existingImages", img.url);
+      });
 
-      // ส่งข้อมูลไปยัง API
+      console.log("🚀 ~ newImages:", newImages);
+      newImages.forEach((file) => {
+        console.log("🚀 ~ newImages.forEach ~ newImages:", newImages);
+        form.append("images", file);
+      });
+
       const response = await fetch(`/api/blogs/${currentBlog.id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedBlog),
+        body: form,
       });
+      console.log("🚀 ~ API Response:", response);
 
       if (!response.ok) {
         throw new Error("Failed to update blog");
       }
 
       loadBlogs();
-
+      setNewImages([]);
       setIsEditDialogOpen(false);
-      toast({
-        title: "สำเร็จ",
-        description: "แก้ไขบทความเรียบร้อยแล้ว",
-      });
+
+      toast({ title: "สำเร็จ", description: "แก้ไขบทความเรียบร้อยแล้ว" });
     } catch (error) {
       console.error("Error updating blog:", error);
       toast({
         title: "เกิดข้อผิดพลาด",
-        description: "ไม่สามารถแก้ไขบทความได้",
+        description:
+          "ไม่สามารถแก้ไขบทความได้: " +
+          (error instanceof Error ? error.message : String(error)),
         variant: "destructive",
       });
     }
@@ -450,22 +460,8 @@ export default function BlogsPage() {
                 accept="image/*"
                 onChange={handleFilesChange}
               />
+            </div>
 
-              <p className="text-xs text-gray-500">
-                ตัวอย่าง URL: https://example.com/image.jpg หรือ
-                /placeholder.svg?height=300&width=500
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="slug">Slug (URL)</Label>
-              <Input
-                id="slug"
-                name="slug"
-                value={formData.slug}
-                onChange={handleInputChange}
-                placeholder="เช่น my-blog-post (ถ้าไม่ระบุจะสร้างจากหัวข้อ)"
-              />
-            </div>
             <div className="flex justify-end space-x-2 pt-4">
               <Button
                 type="button"
@@ -482,7 +478,7 @@ export default function BlogsPage() {
 
       {/* Dialog สำหรับแก้ไขบทความ */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="sm:max-w-[550px] max-h-screen overflow-y-auto w-full">
           <DialogHeader>
             <DialogTitle>แก้ไขบทความ</DialogTitle>
           </DialogHeader>
@@ -544,21 +540,51 @@ export default function BlogsPage() {
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-imageUrl">URL รูปภาพ</Label>
+            <div className="flex gap-2 flex-wrap">
+              <Label htmlFor="edit-imageUrl">เลือกรูปภาพ</Label>
+
+              {currentBlog?.images?.map((img, index) => (
+                <div key={index} className="relative w-24 h-24">
+                  <img
+                    src={img.url}
+                    alt={`Image ${index}`}
+                    className="w-full h-full object-cover rounded border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(img.url)}
+                    className="absolute top-1 right-1 text-xs text-white bg-red-600 rounded-full w-5 h-5 flex items-center justify-center shadow"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
               <Input
-                id="edit-imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleInputChange}
-                placeholder="ใส่ URL รูปภาพ (ถ้าไม่ระบุจะใช้รูปตัวอย่าง)"
+                id="edit-newImages"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  if (e.target.files) {
+                    const files = Array.from(e.target.files);
+                    console.log("📸 รูปภาพใหม่ที่เลือก:", files);
+                    setNewImages(files);
+                  }
+                }}
               />
-              <p className="text-xs text-gray-500">
-                ตัวอย่าง URL: https://example.com/image.jpg หรือ
-                /placeholder.svg?height=300&width=500
-              </p>
+              <div className="flex gap-2 flex-wrap">
+                {newImages.map((file, index) => (
+                  <img
+                    key={index}
+                    src={URL.createObjectURL(file)}
+                    alt={`New Preview ${index}`}
+                    className="h-16 w-16 object-cover rounded border"
+                  />
+                ))}
+              </div>
             </div>
-            <div className="space-y-2">
+
+            {/* <div className="space-y-2">
               <Label htmlFor="edit-slug">Slug (URL)</Label>
               <Input
                 id="edit-slug"
@@ -567,7 +593,7 @@ export default function BlogsPage() {
                 onChange={handleInputChange}
                 placeholder="เช่น my-blog-post (ถ้าไม่ระบุจะสร้างจากหัวข้อ)"
               />
-            </div>
+            </div> */}
             <div className="flex justify-end space-x-2 pt-4">
               <Button
                 type="button"

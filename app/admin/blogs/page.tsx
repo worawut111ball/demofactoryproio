@@ -478,7 +478,7 @@ export default function BlogsPage() {
 
       {/* Dialog สำหรับแก้ไขบทความ */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="sm:max-w-[550px] max-h-screen overflow-y-auto w-full">
           <DialogHeader>
             <DialogTitle>แก้ไขบทความ</DialogTitle>
           </DialogHeader>
@@ -540,18 +540,20 @@ export default function BlogsPage() {
                 />
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="flex gap-2 flex-wrap">
               <Label htmlFor="edit-imageUrl">เลือกรูปภาพ</Label>
+
               {currentBlog?.images?.map((img, index) => (
-                <div key={index} className="relative">
+                <div key={index} className="relative w-24 h-24">
                   <img
                     src={img.url}
                     alt={`Image ${index}`}
-                    className="h-24 w-24 object-cover rounded border"
+                    className="w-full h-full object-cover rounded border"
                   />
                   <button
+                    type="button"
                     onClick={() => handleRemoveImage(img.url)}
-                    className="absolute top-0 right-0 text-xs text-red-600 bg-white rounded-full p-1"
+                    className="absolute top-1 right-1 text-xs text-white bg-red-600 rounded-full w-5 h-5 flex items-center justify-center shadow"
                   >
                     ×
                   </button>

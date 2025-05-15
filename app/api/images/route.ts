@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       title: body.title,
       description: body.description,
       date: new Date(), // ใช้วันที่ปัจจุบัน
+      blog: { connect: { id: body.blogId } }, // เชื่อมโยงกับ blog
     }
 
     // เพิ่มข้อมูลใหม่

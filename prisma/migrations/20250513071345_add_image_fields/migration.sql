@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Image` ADD COLUMN `date` DATETIME(3) NULL,
+    ADD COLUMN `description` VARCHAR(191) NULL,
+    ADD COLUMN `title` VARCHAR(191) NULL;

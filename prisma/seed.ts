@@ -9,7 +9,7 @@ async function main() {
   // Seed Contacts
   console.log('Seeding contacts...')
   await prisma.contact.deleteMany({})
-  
+
   const contactsData = [
     {
       name: 'สมชาย ใจดี',
@@ -48,7 +48,7 @@ async function main() {
   // Seed Blogs
   console.log('Seeding blogs...')
   await prisma.blog.deleteMany({})
-  
+
   const blogsData = [
     {
       title: '5 วิธีเพิ่มประสิทธิภาพการผลิตด้วย OEE',
@@ -90,7 +90,7 @@ async function main() {
   // Seed Testimonials
   console.log('Seeding testimonials...')
   await prisma.testimonial.deleteMany({})
-  
+
   const testimonialsData = [
     {
       content: 'Factory Pro ช่วยให้เราสามารถเพิ่มประสิทธิภาพการผลิตได้อย่างมาก เราสามารถติดตามและวิเคราะห์ข้อมูลได้แบบเรียลไทม์ ทำให้แก้ไขปัญหาได้ทันท่วงที',
@@ -129,7 +129,7 @@ async function main() {
   // Seed Images
   console.log('Seeding images...')
   await prisma.image.deleteMany({})
-  
+
   const imagesData = [
     {
       url: '/automated-assembly-line.png',
@@ -137,5 +137,6 @@ async function main() {
       description: 'A modern automated assembly line in a factory',
       date: new Date('2023-04-10'),
     },
-    {
-      url: '/factory-access-control.png\
+
+  ]
+}

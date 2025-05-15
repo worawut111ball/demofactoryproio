@@ -56,6 +56,7 @@ interface LocalStorageImage {
   title: string
   description: string
   date: string
+  blogId: string
 }
 
 interface LocalStorageData {
@@ -182,6 +183,11 @@ async function migrateData(jsonFilePath: string) {
             title: image.title,
             description: image.description,
             date: new Date(image.date),
+            blog: {
+              connect: {
+                id: image.blogId, // ✅ ต้องมี blogId ที่แม่นยำ
+              }
+            }
           },
           create: {
             id: image.id,
@@ -189,6 +195,11 @@ async function migrateData(jsonFilePath: string) {
             title: image.title,
             description: image.description,
             date: new Date(image.date),
+            blog: {
+              connect: {
+                id: image.blogId, // ✅ เหมือนกัน
+              }
+            }
           },
         })
       }

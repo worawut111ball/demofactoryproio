@@ -1,15 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { testimonials } from "@/lib/db-utils"
 
-// GET /api/testimonials/[id] - ดึงข้อมูลรีวิวตาม ID
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+// GET /api/testimonials/[id]
+export async function GET(req: NextRequest) {
+  const id = req.nextUrl.pathname.split("/").pop()
   try {
-    const testimonial = await testimonials.findById(params.id)
-
+    const testimonial = await testimonials.findById(id!)
     if (!testimonial) {
       return NextResponse.json({ error: "Testimonial not found" }, { status: 404 })
     }
-
     return NextResponse.json(testimonial)
   } catch (error) {
     console.error("Failed to fetch testimonial:", error)
@@ -17,16 +16,15 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
   }
 }
 
-// PATCH /api/testimonials/[id] - อัปเดตข้อมูลรีวิว
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+// PATCH /api/testimonials/[id]
+export async function PATCH(req: NextRequest) {
+  const id = req.nextUrl.pathname.split("/").pop()
   try {
-    const body = await request.json()
-    const updatedTestimonial = await testimonials.update(params.id, body)
-
+    const body = await req.json()
+    const updatedTestimonial = await testimonials.update(id!, body)
     if (!updatedTestimonial) {
       return NextResponse.json({ error: "Testimonial not found" }, { status: 404 })
     }
-
     return NextResponse.json(updatedTestimonial)
   } catch (error) {
     console.error("Failed to update testimonial:", error)
@@ -34,15 +32,14 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
-// DELETE /api/testimonials/[id] - ลบข้อมูลรีวิว
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+// DELETE /api/testimonials/[id]
+export async function DELETE(req: NextRequest) {
+  const id = req.nextUrl.pathname.split("/").pop()
   try {
-    const success = await testimonials.delete(params.id)
-
+    const success = await testimonials.delete(id!)
     if (!success) {
       return NextResponse.json({ error: "Testimonial not found" }, { status: 404 })
     }
-
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Failed to delete testimonial:", error)

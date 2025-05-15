@@ -2,13 +2,10 @@ import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { jwtVerify, SignJWT } from "jose"
 
-// Secret key for JWT signing (ควรเก็บใน environment variables)
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key")
-
-// JWT expiration time
 const JWT_EXPIRATION = "24h"
 
-// Generate JWT token
+// สร้าง JWT
 export async function signJwtToken(payload: any): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
@@ -17,66 +14,67 @@ export async function signJwtToken(payload: any): Promise<string> {
     .sign(JWT_SECRET)
 }
 
-// Verify JWT token
+// ตรวจสอบ JWT
 export async function verifyJwtToken(token: string): Promise<any> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET)
     return payload
-  } catch (error) {
+  } catch {
     return null
   }
 }
 
-// Set JWT token in cookies
-export function setAuthCookie(token: string): void {
-  cookies().set({
+// ตั้งค่า auth cookie
+export async function setAuthCookie(token: string): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set({
     name: "auth_token",
     value: token,
     httpOnly: true,
     path: "/",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24, // 24 hours
-  })
+    maxAge: 60 * 60 * 24, // 24 ชั่วโมง
+  });
 }
 
-// Get JWT token from cookies or headers
-export function getAuthToken(req?: NextRequest): string | null {
-  // For API routes with NextRequest
+// อ่าน token จาก cookie หรือ header
+export async function getAuthToken(req?: NextRequest): Promise<string | null> {
   if (req) {
-    const authHeader = req.headers.get("authorization")
+    const authHeader = req.headers.get("authorization");
     if (authHeader && authHeader.startsWith("Bearer ")) {
-      return authHeader.substring(7)
+      return authHeader.substring(7);
     }
 
-    // Try to get from cookies
-    const token = req.cookies.get("auth_token")?.value
-    return token || null
+    const token = req.cookies.get("auth_token")?.value;
+    return token || null;
   }
 
-  // For server components
-  return cookies().get("auth_token")?.value || null
+  // สำหรับ server component
+  const cookieStore = await cookies();
+  return cookieStore.get("auth_token")?.value || null;
 }
 
-// Remove auth cookie
-export function removeAuthCookie(): void {
-  cookies().delete("auth_token")
+
+// ลบ cookie
+export async function removeAuthCookie(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete("auth_token");
 }
 
-// Middleware to check if user is authenticated
+// ตรวจสอบว่า login อยู่ไหม
 export async function isAuthenticated(req: NextRequest): Promise<boolean> {
-  const token = getAuthToken(req)
+  const token = await getAuthToken(req)
   if (!token) return false
-
   const payload = await verifyJwtToken(token)
   return !!payload
 }
 
-// Helper function to create authenticated response
+// helper สร้าง response
 export function createAuthResponse(data: any, status = 200): NextResponse {
   return NextResponse.json(data, { status })
 }
 
-// Helper function to create error response
+// helper สำหรับ error
 export function createErrorResponse(message: string, status = 400): NextResponse {
   return NextResponse.json({ error: message }, { status })
 }

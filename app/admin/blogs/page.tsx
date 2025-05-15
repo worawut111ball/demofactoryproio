@@ -177,8 +177,9 @@ export default function BlogsPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setNewImages(files);
     }
   };
   // แก้ไขฟังก์ชัน handleEditBlog ให้ใช้ API แทน localStorage
@@ -345,7 +346,11 @@ export default function BlogsPage() {
                               {blog.images?.slice(0, 3).map((img, index) => (
                                 <img
                                   key={index}
-                                  src={img.url}
+                                  src={
+                                    img.url.startsWith("/")
+                                      ? img.url
+                                      : `/${img.url}`
+                                  }
                                   alt={`Image ${index}`}
                                   className="inline-block h-12 w-12 rounded border-2 border-white object-cover shadow-sm"
                                 />
@@ -546,7 +551,7 @@ export default function BlogsPage() {
               {currentBlog?.images?.map((img, index) => (
                 <div key={index} className="relative w-24 h-24">
                   <img
-                    src={img.url}
+                    src={img.url.startsWith("/") ? img.url : `/${img.url}`}
                     alt={`Image ${index}`}
                     className="w-full h-full object-cover rounded border"
                   />
@@ -584,16 +589,6 @@ export default function BlogsPage() {
               </div>
             </div>
 
-            {/* <div className="space-y-2">
-              <Label htmlFor="edit-slug">Slug (URL)</Label>
-              <Input
-                id="edit-slug"
-                name="slug"
-                value={formData.slug}
-                onChange={handleInputChange}
-                placeholder="เช่น my-blog-post (ถ้าไม่ระบุจะสร้างจากหัวข้อ)"
-              />
-            </div> */}
             <div className="flex justify-end space-x-2 pt-4">
               <Button
                 type="button"

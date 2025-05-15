@@ -53,7 +53,7 @@ const rl = readline.createInterface({
 // Function to ask questions and get user input
 function askQuestion(question: string): Promise<string> {
   return new Promise((resolve) => {
-    rl.question(question, (answer) => {
+    rl.question(question, (answer: string) => {
       resolve(answer)
     })
   })

@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mysql:
@@ -11,9 +11,11 @@ services:
       MYSQL_PASSWORD: factorypro
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
+
     volumes:
       - mysql-data:/var/lib/mysql
+      # - mysql-data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - factorypro-network
@@ -23,7 +25,7 @@ services:
     container_name: factorypro-phpmyadmin
     restart: always
     environment:
-      PMA_HOST: mysql
+      PMA_HOST: factorypro-mysql
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: root
@@ -34,6 +36,19 @@ services:
     networks:
       - factorypro-network
 
+  web:
+    build: .
+    container_name: factorypro-nextjs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql:3306/factorypro_db
+    volumes:
+      - ./public:/app/public
+    networks:
+      - factorypro-network
 networks:
   factorypro-network:
     driver: bridge

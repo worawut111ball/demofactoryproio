@@ -12,10 +12,21 @@ export async function GET() {
       orderBy: { date: "desc" },
     });
 
-    return NextResponse.json(data);
+    const blogsWithFixedImagePath = data.map((blog) => ({
+      ...blog,
+      images: blog.images.map((img) => ({
+        ...img,
+        url: img.url.startsWith("/") ? img.url : `/${img.url}`,
+      })),
+    }));
+
+    return NextResponse.json(blogsWithFixedImagePath);
   } catch (error) {
     console.error("Failed to fetch blogs:", error);
-    return NextResponse.json({ error: "Failed to fetch blogs" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch blogs" },
+      { status: 500 }
+    );
   }
 }
 

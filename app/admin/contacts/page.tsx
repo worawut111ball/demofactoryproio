@@ -1,43 +1,50 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import AdminNavbar from "@/components/admin/admin-navbar"
-import AuthCheck from "@/components/admin/auth-check"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Trash2, Eye, EyeOff, Bell } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/components/ui/use-toast"
+import { useEffect, useState } from "react";
+import AdminNavbar from "@/components/admin/admin-navbar";
+import AuthCheck from "@/components/admin/auth-check";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Trash2, Eye, EyeOff, Bell } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ContactData {
-  id: string
-  name: string
-  phone: string
-  email: string
-  company: string
-  position: string
-  date: string | Date
-  isRead: boolean
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  company: string;
+  position: string;
+  date: string | Date;
+  isRead: boolean;
 }
 
 export default function ContactsPage() {
-  const [contacts, setContacts] = useState<ContactData[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
-  const { toast } = useToast()
+  const [contacts, setContacts] = useState<ContactData[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   // ฟังก์ชันสำหรับโหลดข้อมูลการติดต่อ
   const loadContacts = async () => {
     try {
-      setIsLoading(true)
-      const response = await fetch("/api/contacts")
+      setIsLoading(true);
+      const response = await fetch("/api/contacts");
 
       if (!response.ok) {
-        throw new Error("Failed to fetch contacts")
+        throw new Error("Failed to fetch contacts");
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       // แปลงวันที่เป็นฟอร์แมตที่ต้องการ
       const formattedData = data.map((contact: ContactData) => ({
@@ -47,60 +54,60 @@ export default function ContactsPage() {
           month: "short",
           year: "numeric",
         }),
-      }))
+      }));
 
       // เรียงลำดับข้อมูลจากใหม่ไปเก่า
       const sortedData = [...formattedData].sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      })
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
 
-      setContacts(sortedData)
+      setContacts(sortedData);
 
       // นับจำนวนข้อมูลที่ยังไม่ได้อ่าน
-      const unread = sortedData.filter((contact) => !contact.isRead).length
-      setUnreadCount(unread)
+      const unread = sortedData.filter((contact) => !contact.isRead).length;
+      setUnreadCount(unread);
     } catch (error) {
-      console.error("Error loading contacts:", error)
+      console.error("Error loading contacts:", error);
       toast({
         title: "เกิดข้อผิดพลาด",
         description: "ไม่สามารถโหลดข้อมูลการติดต่อได้",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    loadContacts()
-  }, [])
+    loadContacts();
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (confirm("คุณต้องการลบข้อมูลนี้ใช่หรือไม่?")) {
       try {
         const response = await fetch(`/api/contacts/${id}`, {
           method: "DELETE",
-        })
+        });
 
         if (!response.ok) {
-          throw new Error("Failed to delete contact")
+          throw new Error("Failed to delete contact");
         }
 
-        loadContacts()
+        loadContacts();
         toast({
           title: "สำเร็จ",
           description: "ลบข้อมูลสำเร็จ",
-        })
+        });
       } catch (error) {
-        console.error("Error deleting contact:", error)
+        console.error("Error deleting contact:", error);
         toast({
           title: "เกิดข้อผิดพลาด",
           description: "ไม่สามารถลบข้อมูลได้",
           variant: "destructive",
-        })
+        });
       }
     }
-  }
+  };
 
   const toggleReadStatus = async (id: string, currentStatus: boolean) => {
     try {
@@ -110,25 +117,25 @@ export default function ContactsPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ isRead: !currentStatus }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to update contact")
+        throw new Error("Failed to update contact");
       }
 
-      loadContacts()
+      loadContacts();
     } catch (error) {
-      console.error("Error updating contact:", error)
+      console.error("Error updating contact:", error);
       toast({
         title: "เกิดข้อผิดพลาด",
         description: "ไม่สามารถอัปเดตสถานะการอ่านได้",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const markAllAsRead = async () => {
-    if (unreadCount === 0) return
+    if (unreadCount === 0) return;
 
     if (confirm("คุณต้องการทำเครื่องหมายว่าอ่านแล้วทั้งหมดใช่หรือไม่?")) {
       try {
@@ -142,26 +149,26 @@ export default function ContactsPage() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ isRead: true }),
-            }),
-          )
+            })
+          );
 
-        await Promise.all(promises)
-        loadContacts()
+        await Promise.all(promises);
+        loadContacts();
 
         toast({
           title: "สำเร็จ",
           description: "ทำเครื่องหมายว่าอ่านแล้วทั้งหมดเรียบร้อยแล้ว",
-        })
+        });
       } catch (error) {
-        console.error("Error marking all as read:", error)
+        console.error("Error marking all as read:", error);
         toast({
           title: "เกิดข้อผิดพลาด",
           description: "ไม่สามารถอัปเดตสถานะการอ่านได้",
           variant: "destructive",
-        })
+        });
       }
     }
-  }
+  };
 
   return (
     <AuthCheck>
@@ -197,7 +204,9 @@ export default function ContactsPage() {
                   <p className="mt-2 text-gray-500">กำลังโหลดข้อมูล...</p>
                 </div>
               ) : contacts.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">ไม่พบข้อมูลการติดต่อ</div>
+                <div className="text-center py-8 text-gray-500">
+                  ไม่พบข้อมูลการติดต่อ
+                </div>
               ) : (
                 <div className="overflow-x-auto">
                   <Table>
@@ -215,13 +224,22 @@ export default function ContactsPage() {
                     </TableHeader>
                     <TableBody>
                       {contacts.map((contact) => (
-                        <TableRow key={contact.id} className={!contact.isRead ? "bg-blue-50" : ""}>
+                        <TableRow
+                          key={contact.id}
+                          className={!contact.isRead ? "bg-blue-50" : ""}
+                        >
                           <TableCell>
-                            <Badge variant={contact.isRead ? "outline" : "default"}>
+                            <Badge
+                              variant={contact.isRead ? "outline" : "default"}
+                            >
                               {contact.isRead ? "อ่านแล้ว" : "ยังไม่ได้อ่าน"}
                             </Badge>
                           </TableCell>
-                          <TableCell>{contact.date}</TableCell>
+                          <TableCell>
+                            {typeof contact.date === "string"
+                              ? contact.date
+                              : contact.date.toLocaleDateString()}
+                          </TableCell>
                           <TableCell>{contact.name}</TableCell>
                           <TableCell>{contact.phone}</TableCell>
                           <TableCell>{contact.email}</TableCell>
@@ -232,11 +250,25 @@ export default function ContactsPage() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => toggleReadStatus(contact.id, contact.isRead)}
-                                className={contact.isRead ? "text-gray-500" : "text-blue-500"}
-                                title={contact.isRead ? "ทำเครื่องหมายว่ายังไม่ได้อ่าน" : "ทำเครื่องหมายว่าอ่านแล้ว"}
+                                onClick={() =>
+                                  toggleReadStatus(contact.id, contact.isRead)
+                                }
+                                className={
+                                  contact.isRead
+                                    ? "text-gray-500"
+                                    : "text-blue-500"
+                                }
+                                title={
+                                  contact.isRead
+                                    ? "ทำเครื่องหมายว่ายังไม่ได้อ่าน"
+                                    : "ทำเครื่องหมายว่าอ่านแล้ว"
+                                }
                               >
-                                {contact.isRead ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                {contact.isRead ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
                               </Button>
                               <Button
                                 variant="ghost"
@@ -259,5 +291,5 @@ export default function ContactsPage() {
         </div>
       </div>
     </AuthCheck>
-  )
+  );
 }

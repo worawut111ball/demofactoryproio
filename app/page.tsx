@@ -68,7 +68,8 @@ export default function Home() {
         const formatted = Array.isArray(data)
           ? data.map((blog) => ({
               ...blog,
-              imageUrls: blog.images?.map((img) => img.url) || [],
+              imageUrls:
+                blog.images?.map((img: { url: string }) => img.url) || [],
             }))
           : [];
 

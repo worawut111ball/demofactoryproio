@@ -9,13 +9,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client'],
-  },
+  serverExternalPackages: ['@prisma/client'], // ✅ updated key name
   webpack: (config) => {
     config.resolve.alias['.prisma/client'] = require.resolve('@prisma/client')
     return config
   },
 }
 
-export default nextConfig
+module.exports = nextConfig
